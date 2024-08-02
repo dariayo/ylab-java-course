@@ -16,12 +16,13 @@ public class Login extends Command{
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите имя пользователя:");
-        String username = scanner.nextLine();
-        System.out.println("Введите пароль:");
-        String password = scanner.nextLine();
-        personCollection.checkUser(username, password);
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println("Введите имя пользователя:");
+            String username = scanner.nextLine();
+            System.out.println("Введите пароль:");
+            String password = scanner.nextLine();
+            personCollection.checkUser(username, password);
+        }
     }
 
     @Override

@@ -1,11 +1,11 @@
 package ru.dariayo;
 
-public class Car {
-    String mark;
-    String model;
-    int yearOfIssue;
-    int price;
-    String condition;
+public class Car implements Comparable<Car>{
+    private String mark;
+    private String model;
+    private int yearOfIssue;
+    private int price;
+    private String condition;
 
     public Car(String mark, String model, int yearOfIssue, int price, String condition) {
         this.mark = mark;
@@ -53,5 +53,10 @@ public class Car {
 
     public void setCondition(String condition) {
         this.condition = condition;
+    }
+
+    @Override
+    public int compareTo(Car o) {
+        return Integer.compare(this.price - o.getPrice(), 0);
     }
 }

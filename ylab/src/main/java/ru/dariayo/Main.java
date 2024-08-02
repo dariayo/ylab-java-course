@@ -5,8 +5,9 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
-            PersonCollection collection = new PersonCollection();
-            CommandManager commandManager = new CommandManager(collection);
+            PersonCollection personCollection = new PersonCollection();
+            CarCollection carCollection = new CarCollection();
+            CommandManager commandManager = new CommandManager(personCollection, carCollection);
             System.out.println("Введите команду login для входа или register для регистрации");
             String input;
             do {
