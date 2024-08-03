@@ -1,7 +1,7 @@
 package ru.dariayo.commands;
 
-import ru.dariayo.CarCollection;
 import ru.dariayo.Command;
+import ru.dariayo.repositories.CarCollection;
 
 public class Show extends Command {
     private final CarCollection carCollection;

@@ -3,7 +3,7 @@ package ru.dariayo.commands;
 import java.util.Scanner;
 
 import ru.dariayo.Command;
-import ru.dariayo.PersonCollection;
+import ru.dariayo.repositories.PersonCollection;
 
 public class Login extends Command{
 

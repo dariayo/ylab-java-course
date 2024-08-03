@@ -1,4 +1,4 @@
-package ru.dariayo;
+package ru.dariayo.model;
 
 public class Car implements Comparable<Car>{
     private String mark;

@@ -1,7 +1,9 @@
-package ru.dariayo;
+package ru.dariayo.repositories;
 
 import java.util.Scanner;
 import java.util.TreeSet;
+
+import ru.dariayo.model.Car;
 
 public class CarCollection {
     private TreeSet<Car> carCollection = new TreeSet<>();

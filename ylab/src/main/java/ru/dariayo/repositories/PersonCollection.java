@@ -1,6 +1,8 @@
-package ru.dariayo;
+package ru.dariayo.repositories;
 
 import java.util.TreeSet;
+
+import ru.dariayo.model.Person;
 
 public class PersonCollection {
     private TreeSet<Person> personCollection = new TreeSet<>();

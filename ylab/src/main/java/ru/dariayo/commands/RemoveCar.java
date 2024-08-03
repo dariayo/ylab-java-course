@@ -2,9 +2,9 @@ package ru.dariayo.commands;
 
 import java.util.Scanner;
 
-import ru.dariayo.CarCollection;
 import ru.dariayo.Command;
-import ru.dariayo.PersonCollection;
+import ru.dariayo.repositories.CarCollection;
+import ru.dariayo.repositories.PersonCollection;
 
 public class RemoveCar extends Command {
     private final CarCollection carCollection;

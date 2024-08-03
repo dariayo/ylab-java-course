@@ -1,4 +1,4 @@
-package ru.dariayo;
+package ru.dariayo.model;
 
 public class Person implements Comparable<Person>  {
     private String name;

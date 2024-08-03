@@ -8,6 +8,8 @@ import ru.dariayo.commands.Register;
 import ru.dariayo.commands.RemoveCar;
 import ru.dariayo.commands.Show;
 import ru.dariayo.commands.UpdateCar;
+import ru.dariayo.repositories.CarCollection;
+import ru.dariayo.repositories.PersonCollection;
 
 public class CommandManager {
     private static HashMap<String, Command> commands = new HashMap<>();

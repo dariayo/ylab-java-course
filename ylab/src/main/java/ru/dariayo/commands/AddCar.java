@@ -2,10 +2,10 @@ package ru.dariayo.commands;
 
 import java.util.Scanner;
 
-import ru.dariayo.Car;
-import ru.dariayo.CarCollection;
 import ru.dariayo.Command;
-import ru.dariayo.PersonCollection;
+import ru.dariayo.model.Car;
+import ru.dariayo.repositories.CarCollection;
+import ru.dariayo.repositories.PersonCollection;
 
 public class AddCar extends Command {
     private final CarCollection carCollection;
