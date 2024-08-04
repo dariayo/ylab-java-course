@@ -26,6 +26,7 @@ public class CommandManager {
         initializeCommand(new FilterUsers(personCollection));
         initializeCommand(new SearchCar(carCollection));
         initializeCommand(new ShowLogs(personCollection, auditLogRepository));
+        initializeCommand(new Help());
     }
 
     /**

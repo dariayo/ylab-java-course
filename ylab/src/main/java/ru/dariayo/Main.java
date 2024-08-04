@@ -19,7 +19,7 @@ public class Main {
             OrderCollection orderCollection = new OrderCollection(auditLogRepository);
             CommandManager commandManager = new CommandManager(personCollection, carCollection, orderCollection,
                     auditLogRepository);
-            System.out.println("Введите команду login для входа или register для регистрации");
+            System.out.println("Введите команду login для входа или register для регистрации, help - все команды");
             String input;
             Person person = new Person("Mike", "1234", "user", "mike@gmail.com");
             personCollection.addPerson(person);

@@ -21,6 +21,10 @@ public class CarCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    public CarCollection() {
+        //TODO Auto-generated constructor stub
+    }
+
     /**
      * information about all cars
      */

@@ -1,3 +1,4 @@
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/log/AuditLog.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/model/Order.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/model/Car.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/model/Person.java
@@ -21,6 +22,8 @@
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/UpdateCar.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/SearchOrder.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/repositories/OrderCollection.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/ShowLogs.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/ShowUsers.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/comparator/PersonContactsComparator.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/Show.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/log/AuditLogRepository.java
