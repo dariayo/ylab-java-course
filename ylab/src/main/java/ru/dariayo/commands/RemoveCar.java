@@ -9,6 +9,7 @@ import ru.dariayo.repositories.PersonCollection;
 public class RemoveCar extends Command {
     private final CarCollection carCollection;
     private final PersonCollection personCollection;
+    
 
     public RemoveCar(CarCollection carCollection, PersonCollection personCollection) {
         this.carCollection = carCollection;

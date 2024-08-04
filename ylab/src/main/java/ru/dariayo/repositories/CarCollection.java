@@ -2,21 +2,23 @@ package ru.dariayo.repositories;
 
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import ru.dariayo.comparator.PersonContactsComparator;
-import ru.dariayo.comparator.PersonNameComparator;
-import ru.dariayo.comparator.PersonOrdersComparator;
+import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
-import ru.dariayo.model.Person;
 
 public class CarCollection {
     private TreeSet<Car> carCollection = new TreeSet<>();
+    private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
+    private AuditLogRepository auditLogRepository;
 
     public CarCollection(TreeSet<Car> carCollection) {
         this.carCollection = carCollection;
     }
 
-    public CarCollection() {
+    public CarCollection(AuditLogRepository auditLogRepository) {
+        this.auditLogRepository = auditLogRepository;
     }
 
     public void showCars() {
@@ -30,11 +32,15 @@ public class CarCollection {
 
     public void addCar(Car car) {
         carCollection.add(car);
+        logger.log(Level.INFO, "Add car: " + car.getMark());
+        auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }
 
     public void removeCar(String mark, String model) {
         for (Car car : carCollection) {
             if (car.getModel().equals(model) && car.getMark().equals(mark)) {
+                logger.log(Level.INFO, "Remove car: " + car.getMark());
+                auditLogRepository.logAction("System", "Remove car", "Mark: " + car.getMark() + " Model: " + car.getModel());
                 carCollection.remove(car);
                 System.out.println("Автомобиль удален");
             }
@@ -55,6 +61,8 @@ public class CarCollection {
                     car.setPrice(Integer.parseInt(scanner.nextLine()));
                     System.out.println("Введите состояние автомобиля: ");
                     car.setCondition(scanner.nextLine());
+                    logger.log(Level.INFO, "Update car: " + car.getMark());
+                    auditLogRepository.logAction("System", "Update car", "Mark: " + car.getMark() + " Model: " + car.getModel());
                 }
             }
         }

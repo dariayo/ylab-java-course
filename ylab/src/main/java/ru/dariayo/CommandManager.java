@@ -3,13 +3,14 @@ package ru.dariayo;
 import java.util.HashMap;
 
 import ru.dariayo.commands.*;
+import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.*;
 
 public class CommandManager {
     private static HashMap<String, Command> commands = new HashMap<>();
 
     public CommandManager(PersonCollection personCollection, CarCollection carCollection,
-            OrderCollection orderCollection) {
+            OrderCollection orderCollection, AuditLogRepository auditLogRepository) {
         commands = new HashMap<>();
         initializeCommand(new Register(personCollection));
         initializeCommand(new Login(personCollection));
@@ -24,6 +25,7 @@ public class CommandManager {
         initializeCommand(new Search(orderCollection));
         initializeCommand(new FilterUsers(personCollection));
         initializeCommand(new SearchCar(carCollection));
+        initializeCommand(new ShowLogs(personCollection, auditLogRepository));
     }
 
     public void existCommand(String command) {

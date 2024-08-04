@@ -2,30 +2,40 @@ package ru.dariayo.repositories;
 
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Order;
 import ru.dariayo.model.Person;
 
 public class OrderCollection {
     private TreeSet<Order> orderCollection = new TreeSet<>();
+    private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
+    private AuditLogRepository auditLogRepository;
 
     public OrderCollection(TreeSet<Order> orderCollection) {
         this.orderCollection = orderCollection;
     }
 
-    public OrderCollection() {
+    public OrderCollection(AuditLogRepository auditLogRepository) {
+        this.auditLogRepository = auditLogRepository;
     }
 
     public void makeOrder(Person person, String mark, String model, CarCollection carCollection) {
         Order order = new Order(person.getName(), "Placed", carCollection.getByMark(mark, model));
         orderCollection.add(order);
         System.out.println(order.getCar().getPrice());
+        logger.log(Level.INFO, "Create order: " + order.getId());
+        auditLogRepository.logAction("System", "Create order", "Number: " + order.getId() + " By user: " + order.getNameBuyer());
     }
 
     public void changeStatus(int id, String status) {
         for (Order order : orderCollection) {
             if (order.getId() == id) {
                 order.setStatus(status);
+                logger.log(Level.INFO, "Update order: " + order.getId());
+                auditLogRepository.logAction("System", "Update order", "Number: " + order.getId() + " New status: " + order.getStatus());
             }
         }
     }
