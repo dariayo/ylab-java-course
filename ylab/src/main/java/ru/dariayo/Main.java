@@ -1,11 +1,8 @@
 package ru.dariayo;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Scanner;
 
-import ru.dariayo.log.AuditLog;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
 import ru.dariayo.model.Person;
@@ -24,13 +21,13 @@ public class Main {
                     auditLogRepository);
             System.out.println("Введите команду login для входа или register для регистрации");
             String input;
-            Person person = new Person("input", "input", "user", "input");
+            Person person = new Person("Mike", "1234", "user", "mike@gmail.com");
             personCollection.addPerson(person);
-            Person person1 = new Person("minput", "input", "user", "ainput");
+            Person person1 = new Person("Katya", "567", "user", "katya@yandex.ru");
             personCollection.addPerson(person1);
-            Car car = new Car("input", "input", 2, 2, "s");
+            Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
             carCollection.addCar(car);
-            Car car1 = new Car("ainput", "ainput", 3, 4, "5");
+            Car car1 = new Car("Toyota", "Land", 1998, 2000, "Bad");
             carCollection.addCar(car1);
             do {
                 if (!scanner.hasNextLine())

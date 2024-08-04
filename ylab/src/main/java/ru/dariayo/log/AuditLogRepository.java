@@ -18,6 +18,15 @@ public class AuditLogRepository {
         return new ArrayList<>(auditLogs);
     }
 
+    /**
+     * filter logs
+     * 
+     * @param from
+     * @param to
+     * @param user
+     * @param action
+     * @return
+     */
     public List<AuditLog> filterLogs(LocalDateTime from, LocalDateTime to, String user, String action) {
         return auditLogs.stream()
                 .filter(log -> (from == null || !log.getTimestamp().isBefore(from)) &&
@@ -27,6 +36,12 @@ public class AuditLogRepository {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * export logs to file
+     * 
+     * @param filename
+     * @throws IOException
+     */
     public void exportLogsToFile(String filename) throws IOException {
         try (FileWriter writer = new FileWriter(filename)) {
             for (AuditLog log : auditLogs) {

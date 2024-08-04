@@ -28,6 +28,11 @@ public class CommandManager {
         initializeCommand(new ShowLogs(personCollection, auditLogRepository));
     }
 
+    /**
+     * check command when user input
+     * 
+     * @param command
+     */
     public void existCommand(String command) {
         if (commands.containsKey(command)) {
             commands.get(command).execute();
@@ -36,6 +41,11 @@ public class CommandManager {
         }
     }
 
+    /**
+     * add command to command manager
+     * 
+     * @param command
+     */
     void initializeCommand(Command command) {
         if (commands.containsKey(command.getName())) {
             throw new IllegalArgumentException("Данная команда уже есть");

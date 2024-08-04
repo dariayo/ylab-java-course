@@ -2,9 +2,7 @@ package ru.dariayo.repositories;
 
 import java.util.TreeSet;
 
-import ru.dariayo.comparator.PersonContactsComparator;
-import ru.dariayo.comparator.PersonNameComparator;
-import ru.dariayo.comparator.PersonOrdersComparator;
+import ru.dariayo.comparator.*;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Person;
 import java.util.logging.Level;
@@ -24,6 +22,11 @@ public class PersonCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    /**
+     * add person to treeset
+     * 
+     * @param person
+     */
     public void addPerson(Person person) {
         this.personCollection.add(person);
         setPerson(person);
@@ -31,6 +34,12 @@ public class PersonCollection {
         auditLogRepository.logAction("System", "Add Person", "Added person: " + person.getName());
     }
 
+    /**
+     * check login and password when user loginz
+     * 
+     * @param username
+     * @param password
+     */
     public void checkUser(String username, String password) {
         for (Person person : personCollection) {
             if (person.getName().equals(username) && person.getPassword().equals(password)) {
@@ -50,6 +59,9 @@ public class PersonCollection {
         this.person = person;
     }
 
+    /**
+     * print information about users
+     */
     public void info() {
         for (Person person : personCollection) {
             System.out.println(person.getName());
@@ -57,6 +69,11 @@ public class PersonCollection {
         }
     }
 
+    /**
+     * sort users by name, contacts and count of orders
+     * 
+     * @param param
+     */
     public void printSortedUsers(String param) {
         TreeSet<Person> sortedCollection;
 

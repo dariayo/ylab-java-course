@@ -21,32 +21,51 @@ public class CarCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    /**
+     * information about all cars
+     */
     public void showCars() {
-        Car car1 = new Car("null", "null", 0, 0, null);
-        carCollection.add(car1);
         for (Car car : carCollection) {
             System.out.println("Марка: " + car.getMark() + " модель: " + car.getModel() + " год выпуска: "
                     + car.getYearOfIssue() + " цена: " + car.getPrice() + " состояние: " + car.getCondition());
         }
     }
 
+    /**
+     * add new car to treeset
+     * 
+     * @param car
+     */
     public void addCar(Car car) {
         carCollection.add(car);
         logger.log(Level.INFO, "Add car: " + car.getMark());
         auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }
 
+    /**
+     * remove car
+     * 
+     * @param mark
+     * @param model
+     */
     public void removeCar(String mark, String model) {
         for (Car car : carCollection) {
             if (car.getModel().equals(model) && car.getMark().equals(mark)) {
                 logger.log(Level.INFO, "Remove car: " + car.getMark());
-                auditLogRepository.logAction("System", "Remove car", "Mark: " + car.getMark() + " Model: " + car.getModel());
+                auditLogRepository.logAction("System", "Remove car",
+                        "Mark: " + car.getMark() + " Model: " + car.getModel());
                 carCollection.remove(car);
                 System.out.println("Автомобиль удален");
             }
         }
     }
 
+    /**
+     * update params of car
+     * 
+     * @param mark
+     * @param model
+     */
     public void updateCar(String mark, String model) {
         for (Car car : carCollection) {
             if (car.getModel().equals(model) && car.getMark().equals(mark)) {
@@ -62,12 +81,20 @@ public class CarCollection {
                     System.out.println("Введите состояние автомобиля: ");
                     car.setCondition(scanner.nextLine());
                     logger.log(Level.INFO, "Update car: " + car.getMark());
-                    auditLogRepository.logAction("System", "Update car", "Mark: " + car.getMark() + " Model: " + car.getModel());
+                    auditLogRepository.logAction("System", "Update car",
+                            "Mark: " + car.getMark() + " Model: " + car.getModel());
                 }
             }
         }
     }
 
+    /**
+     * get car by mark
+     * 
+     * @param mark
+     * @param model
+     * @return
+     */
     public Car getByMark(String mark, String model) {
         for (Car car : carCollection) {
             if (car.getMark().equals(mark) && car.getModel().equals(model)) {
@@ -77,6 +104,11 @@ public class CarCollection {
         return null;
     }
 
+    /**
+     * search car by param
+     * 
+     * @param param
+     */
     public void searchCar(String param) {
         TreeSet<Car> cars = new TreeSet<>();
         System.out.println("Введите параметр поиска");

@@ -27,18 +27,18 @@ public class AddCar extends Command {
                 System.out.println("Введите модель автомобиля: ");
                 String model = scanner.nextLine();
                 System.out.println("Введите год выпуска автомобиля: ");
-                // TODO
                 int year = Integer.parseInt(scanner.nextLine());
                 System.out.println("Введите цену автомобиля: ");
-                // TODO
                 int price = Integer.parseInt(scanner.nextLine());
                 System.out.println("Введите состояние автомобиля: ");
                 String condition = scanner.nextLine();
                 Car car = new Car(mark, model, year, price, condition);
                 carCollection.addCar(car);
             } catch (NumberFormatException e) {
-                e.printStackTrace();
+                System.out.println("Цена и год выпуска должны быть числом");
             }
+        } else {
+            System.out.println("Данное действие может выполнять только админ и менеджер");
         }
     }
 

@@ -22,24 +22,43 @@ public class OrderCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    /**
+     * add order to treeset
+     * 
+     * @param person
+     * @param mark
+     * @param model
+     * @param carCollection
+     */
     public void makeOrder(Person person, String mark, String model, CarCollection carCollection) {
         Order order = new Order(person.getName(), "Placed", carCollection.getByMark(mark, model));
         orderCollection.add(order);
         System.out.println(order.getCar().getPrice());
         logger.log(Level.INFO, "Create order: " + order.getId());
-        auditLogRepository.logAction("System", "Create order", "Number: " + order.getId() + " By user: " + order.getNameBuyer());
+        auditLogRepository.logAction("System", "Create order",
+                "Number: " + order.getId() + " By user: " + order.getNameBuyer());
     }
 
+    /**
+     * change status of order
+     * 
+     * @param id
+     * @param status
+     */
     public void changeStatus(int id, String status) {
         for (Order order : orderCollection) {
             if (order.getId() == id) {
                 order.setStatus(status);
                 logger.log(Level.INFO, "Update order: " + order.getId());
-                auditLogRepository.logAction("System", "Update order", "Number: " + order.getId() + " New status: " + order.getStatus());
+                auditLogRepository.logAction("System", "Update order",
+                        "Number: " + order.getId() + " New status: " + order.getStatus());
             }
         }
     }
 
+    /**
+     * get order by id
+     */
     public void getOrder(int id) {
         for (Order order : orderCollection) {
             if (order.getId() == id) {
@@ -49,6 +68,11 @@ public class OrderCollection {
         }
     }
 
+    /**
+     * search order by param (name of client, status, car)
+     * 
+     * @param param
+     */
     public void searchOrder(String param) {
         TreeSet<Order> orders = new TreeSet<>();
         System.out.println("Введите параметр поиска");
