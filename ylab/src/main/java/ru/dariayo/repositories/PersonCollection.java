@@ -37,5 +37,11 @@ public class PersonCollection {
         this.person = person;
     }
 
+    public void info() {
+        for (Person person : personCollection) {
+            System.out.println(person.getName());
+            System.out.println(person.getRole());
+        }
+    }
 
 }

@@ -2,19 +2,14 @@ package ru.dariayo;
 
 import java.util.HashMap;
 
-import ru.dariayo.commands.AddCar;
-import ru.dariayo.commands.Login;
-import ru.dariayo.commands.Register;
-import ru.dariayo.commands.RemoveCar;
-import ru.dariayo.commands.Show;
-import ru.dariayo.commands.UpdateCar;
-import ru.dariayo.repositories.CarCollection;
-import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.commands.*;
+import ru.dariayo.repositories.*;
 
 public class CommandManager {
     private static HashMap<String, Command> commands = new HashMap<>();
 
-    public CommandManager(PersonCollection personCollection, CarCollection carCollection) {
+    public CommandManager(PersonCollection personCollection, CarCollection carCollection,
+            OrderCollection orderCollection) {
         commands = new HashMap<>();
         initializeCommand(new Register(personCollection));
         initializeCommand(new Login(personCollection));
@@ -22,6 +17,11 @@ public class CommandManager {
         initializeCommand(new AddCar(carCollection, personCollection));
         initializeCommand(new UpdateCar(carCollection, personCollection));
         initializeCommand(new RemoveCar(carCollection, personCollection));
+        initializeCommand(new Buy(personCollection, carCollection, orderCollection));
+        initializeCommand(new ShowUsers(personCollection));
+        initializeCommand(new Cancel(orderCollection));
+        initializeCommand(new ChangeOrder(orderCollection));
+        initializeCommand(new Search(orderCollection));
     }
 
     public void existCommand(String command) {

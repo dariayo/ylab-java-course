@@ -5,7 +5,7 @@ import java.util.Scanner;
 import ru.dariayo.Command;
 import ru.dariayo.repositories.PersonCollection;
 
-public class Login extends Command{
+public class Login extends Command {
 
     private final PersonCollection personCollection;
 

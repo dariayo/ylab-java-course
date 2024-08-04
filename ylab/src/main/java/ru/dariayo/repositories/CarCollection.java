@@ -58,4 +58,13 @@ public class CarCollection {
         }
     }
 
+    public Car getByMark(String mark, String model) {
+        for (Car car : carCollection) {
+            if (car.getMark().equals(mark) && car.getModel().equals(model)) {
+                return car;
+            }
+        }
+        return null;
+    }
+
 }

@@ -1,13 +1,14 @@
 package ru.dariayo.model;
 
 public class Order implements Comparable<Order> {
+    private static int currentId = 0;
     private int id;
     private String nameBuyer;
     private String status;
     private Car car;
 
-    public Order(int id, String nameBuyer, String status, Car car) {
-        this.id = id;
+    public Order(String nameBuyer, String status, Car car) {
+        this.id = ++currentId;
         this.nameBuyer = nameBuyer;
         this.status = status;
         this.car = car;
@@ -15,10 +16,6 @@ public class Order implements Comparable<Order> {
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNameBuyer() {

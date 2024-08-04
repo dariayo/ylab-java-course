@@ -37,7 +37,6 @@ public class AddCar extends Command {
                 Car car = new Car(mark, model, year, price, condition);
                 carCollection.addCar(car);
             } catch (NumberFormatException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }

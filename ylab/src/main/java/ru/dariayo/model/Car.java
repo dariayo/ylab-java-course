@@ -1,6 +1,6 @@
 package ru.dariayo.model;
 
-public class Car implements Comparable<Car>{
+public class Car implements Comparable<Car> {
     private String mark;
     private String model;
     private int yearOfIssue;
