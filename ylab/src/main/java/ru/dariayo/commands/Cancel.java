@@ -15,9 +15,12 @@ public class Cancel extends Command {
     @Override
     public void execute() {
         System.out.println("Введите номер заказа, который хотите отменить: ");
-        Scanner scanner = new Scanner(System.in);
-        int id = Integer.parseInt(scanner.nextLine());
-        orderCollection.changeStatus(id, "cancel");
+        try (Scanner scanner = new Scanner(System.in)) {
+            int id = Integer.parseInt(scanner.nextLine());
+            orderCollection.changeStatus(id, "cancel");
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         System.out.println("Заказ отменен");
     }
 
