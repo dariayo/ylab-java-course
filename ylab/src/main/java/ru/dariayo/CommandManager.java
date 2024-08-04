@@ -22,6 +22,7 @@ public class CommandManager {
         initializeCommand(new Cancel(orderCollection));
         initializeCommand(new ChangeOrder(orderCollection));
         initializeCommand(new Search(orderCollection));
+        initializeCommand(new FilterUsers(personCollection));
     }
 
     public void existCommand(String command) {

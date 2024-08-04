@@ -2,6 +2,7 @@ package ru.dariayo;
 
 import java.util.Scanner;
 
+import ru.dariayo.model.Person;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.repositories.PersonCollection;
@@ -15,6 +16,10 @@ public class Main {
             CommandManager commandManager = new CommandManager(personCollection, carCollection, orderCollection);
             System.out.println("Введите команду login для входа или register для регистрации");
             String input;
+            Person person = new Person("input", "input", "user", "input");
+            personCollection.addPerson(person);
+            Person person1 = new Person("minput", "input", "user", "ainput");
+            personCollection.addPerson(person1);
             do {
                 if (!scanner.hasNextLine())
                     return;
