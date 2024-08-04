@@ -1,9 +1,6 @@
 package ru.dariayo.repositories;
 
-import java.util.Comparator;
-import java.util.List;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import ru.dariayo.comparator.PersonContactsComparator;
 import ru.dariayo.comparator.PersonNameComparator;
@@ -71,7 +68,8 @@ public class PersonCollection {
         sortedCollection.addAll(personCollection);
 
         for (Person person : sortedCollection) {
-            System.out.println(person.getName() + ", " + person.getRole() + ", " + person.getContacts() + ", " + person.getCountOrders());
+            System.out.println(person.getName() + ", " + person.getRole() + ", " + person.getContacts() + ", "
+                    + person.getCountOrders());
         }
     }
 

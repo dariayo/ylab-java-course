@@ -57,6 +57,10 @@ public class Car implements Comparable<Car> {
 
     @Override
     public int compareTo(Car o) {
-        return Integer.compare(this.price - o.getPrice(), 0);
+        int orderComparison = Integer.compare(this.price, o.getPrice());
+        if (orderComparison != 0) {
+            return orderComparison;
+        }
+        return this.model.compareTo(o.getModel());
     }
 }

@@ -1,5 +1,6 @@
 package ru.dariayo.repositories;
 
+import java.util.Scanner;
 import java.util.TreeSet;
 
 import ru.dariayo.model.Order;
@@ -37,4 +38,42 @@ public class OrderCollection {
             }
         }
     }
+
+    public void searchOrder(String param) {
+        TreeSet<Order> orders = new TreeSet<>();
+        System.out.println("Введите параметр поиска");
+        Scanner scanner = new Scanner(System.in);
+        String arg = scanner.nextLine();
+        switch (param) {
+            case "client":
+                for (Order order : orderCollection) {
+                    if (order.getNameBuyer().equals(arg)) {
+                        orders.add(order);
+                    }
+                }
+                break;
+            case "status":
+                for (Order order : orderCollection) {
+                    if (order.getStatus().equals(arg)) {
+                        orders.add(order);
+                    }
+                }
+                break;
+            case "car":
+                for (Order order : orderCollection) {
+                    if (order.getCar().equals(arg)) {
+                        orders.add(order);
+                    }
+                }
+                break;
+            default:
+                System.out.println("Invalid sort parameter.");
+                return;
+        }
+
+        for (Order order : orders) {
+            System.out.println(order.getNameBuyer() + ", " + order.getCar() + ", " + order.getStatus());
+        }
+    }
+
 }

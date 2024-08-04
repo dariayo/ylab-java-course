@@ -2,6 +2,7 @@ package ru.dariayo;
 
 import java.util.Scanner;
 
+import ru.dariayo.model.Car;
 import ru.dariayo.model.Person;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.OrderCollection;
@@ -20,6 +21,10 @@ public class Main {
             personCollection.addPerson(person);
             Person person1 = new Person("minput", "input", "user", "ainput");
             personCollection.addPerson(person1);
+            Car car = new Car("input", "input", 2, 2, "s");
+            carCollection.addCar(car);
+            Car car1 = new Car("ainput", "ainput", 3, 4, "5");
+            carCollection.addCar(car1);
             do {
                 if (!scanner.hasNextLine())
                     return;

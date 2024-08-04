@@ -3,7 +3,11 @@ package ru.dariayo.repositories;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import ru.dariayo.comparator.PersonContactsComparator;
+import ru.dariayo.comparator.PersonNameComparator;
+import ru.dariayo.comparator.PersonOrdersComparator;
 import ru.dariayo.model.Car;
+import ru.dariayo.model.Person;
 
 public class CarCollection {
     private TreeSet<Car> carCollection = new TreeSet<>();
@@ -46,10 +50,8 @@ public class CarCollection {
                     System.out.println("Введите модель автомобиля: ");
                     car.setModel(scanner.nextLine());
                     System.out.println("Введите год выпуска автомобиля: ");
-                    // TODO
                     car.setYearOfIssue(Integer.parseInt(scanner.nextLine()));
                     System.out.println("Введите цену автомобиля: ");
-                    // TODO
                     car.setPrice(Integer.parseInt(scanner.nextLine()));
                     System.out.println("Введите состояние автомобиля: ");
                     car.setCondition(scanner.nextLine());
@@ -65,6 +67,50 @@ public class CarCollection {
             }
         }
         return null;
+    }
+
+    public void searchCar(String param) {
+        TreeSet<Car> cars = new TreeSet<>();
+        System.out.println("Введите параметр поиска");
+        Scanner scanner = new Scanner(System.in);
+        String arg = scanner.nextLine();
+        switch (param) {
+            case "mark":
+                for (Car car : carCollection) {
+                    if (car.getMark().equals(arg)) {
+                        cars.add(car);
+                    }
+                }
+                break;
+            case "model":
+                for (Car car : carCollection) {
+                    if (car.getModel().equals(arg)) {
+                        cars.add(car);
+                    }
+                }
+                break;
+            case "price":
+                for (Car car : carCollection) {
+                    if (car.getPrice() == Integer.parseInt(arg)) {
+                        cars.add(car);
+                    }
+                }
+                break;
+            case "year":
+                for (Car car : carCollection) {
+                    if (car.getYearOfIssue() == Integer.parseInt(arg)) {
+                        cars.add(car);
+                    }
+                }
+                break;
+            default:
+                System.out.println("Invalid sort parameter.");
+                return;
+        }
+
+        for (Car car : cars) {
+            System.out.println(car.getMark() + ", " + car.getModel() + ", " + car.getPrice());
+        }
     }
 
 }
