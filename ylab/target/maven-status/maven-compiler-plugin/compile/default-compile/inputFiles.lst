@@ -23,6 +23,7 @@
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/SearchOrder.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/repositories/OrderCollection.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/ShowLogs.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/Help.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/ShowUsers.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/comparator/PersonContactsComparator.java
 /Users/dasha/ylab-java-course/ylab-java-course/ylab/src/main/java/ru/dariayo/commands/Show.java
