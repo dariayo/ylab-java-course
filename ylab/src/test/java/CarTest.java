@@ -7,6 +7,7 @@ import ru.dariayo.model.Car;
 import ru.dariayo.repositories.CarCollection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -23,7 +24,7 @@ public class CarTest {
     }
 
     @Test
-    public void testAddCar() {
+    public void testAddCar_shouldReturnNewCar() {
         Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
         carCollection.addCar(car);
 
@@ -32,7 +33,16 @@ public class CarTest {
     }
 
     @Test
-    public void testRemoveCar() {
+    public void testAddCar_shouldReturnFault() {
+        Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
+        carCollection.addCar(car);
+
+        Car cars = carCollection.getByMark("Bmw", "M5");
+        assertFalse(cars.getMark().equals("Mercedes"));
+    }
+
+    @Test
+    public void testRemoveCar_shouldRemoveNewCar() {
         Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
         carCollection.addCar(car);
         carCollection.removeCar("Bmw", "M5");
@@ -42,7 +52,7 @@ public class CarTest {
     }
 
     @Test
-    public void testUpdateCar() {
+    public void testUpdateCar_shouldChangeAttributesCar() {
         Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
 
         carCollection.updateCar("Bmw", "M5");

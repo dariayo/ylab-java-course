@@ -6,7 +6,6 @@ import ru.dariayo.commands.*;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.*;
 import ru.dariayo.userInterface.ConsoleUserInterface;
-import ru.dariayo.userInterface.UserInterface;
 
 public class CommandManager {
     private static HashMap<String, Command> commands = new HashMap<>();
