@@ -5,17 +5,19 @@ import java.util.HashMap;
 import ru.dariayo.commands.*;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.*;
+import ru.dariayo.userInterface.ConsoleUserInterface;
+import ru.dariayo.userInterface.UserInterface;
 
 public class CommandManager {
     private static HashMap<String, Command> commands = new HashMap<>();
 
     public CommandManager(PersonCollection personCollection, CarCollection carCollection,
-            OrderCollection orderCollection, AuditLogRepository auditLogRepository) {
+            OrderCollection orderCollection, AuditLogRepository auditLogRepository, ConsoleUserInterface userInterface) {
         commands = new HashMap<>();
         initializeCommand(new Register(personCollection));
         initializeCommand(new Login(personCollection));
         initializeCommand(new Show(carCollection));
-        initializeCommand(new AddCar(carCollection, personCollection));
+        initializeCommand(new AddCar(carCollection, personCollection, userInterface));
         initializeCommand(new UpdateCar(carCollection, personCollection));
         initializeCommand(new RemoveCar(carCollection, personCollection));
         initializeCommand(new Buy(personCollection, carCollection, orderCollection));

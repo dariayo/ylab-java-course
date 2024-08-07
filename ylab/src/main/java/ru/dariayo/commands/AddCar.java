@@ -6,14 +6,18 @@ import ru.dariayo.Command;
 import ru.dariayo.model.Car;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
+import ru.dariayo.userInterface.UserInterface;
 
 public class AddCar extends Command {
     private final CarCollection carCollection;
     private final PersonCollection personCollection;
+    private final ConsoleUserInterface userInterface;
 
-    public AddCar(CarCollection carCollection, PersonCollection personCollection) {
+    public AddCar(CarCollection carCollection, PersonCollection personCollection, ConsoleUserInterface userInterface) {
         this.carCollection = carCollection;
         this.personCollection = personCollection;
+        this.userInterface = userInterface;
     }
 
     @Override
@@ -21,21 +25,16 @@ public class AddCar extends Command {
         System.out.println(personCollection.getPerson().getRole());
         if (personCollection.getPerson().getRole().equals("admin")
                 || personCollection.getPerson().getRole().equals("manager")) {
-            try (Scanner scanner = new Scanner(System.in)) {
-                System.out.println("Введите марку автомобиля: ");
-                String mark = scanner.nextLine();
-                System.out.println("Введите модель автомобиля: ");
-                String model = scanner.nextLine();
-                System.out.println("Введите год выпуска автомобиля: ");
-                int year = Integer.parseInt(scanner.nextLine());
-                System.out.println("Введите цену автомобиля: ");
-                int price = Integer.parseInt(scanner.nextLine());
-                System.out.println("Введите состояние автомобиля: ");
-                String condition = scanner.nextLine();
+            try {
+                String mark = userInterface.getInput("Введите марку автомобиля: ");
+                String model = userInterface.getInput("Введите модель автомобиля: ");
+                int year = Integer.parseInt(userInterface.getInput("Введите год выпуска автомобиля: "));
+                int price = Integer.parseInt(userInterface.getInput("Введите цену автомобиля: "));
+                String condition = userInterface.getInput("Введите состояние автомобиля: ");
                 Car car = new Car(mark, model, year, price, condition);
                 carCollection.addCar(car);
             } catch (NumberFormatException e) {
-                System.out.println("Цена и год выпуска должны быть числом");
+                userInterface.showMessage("Цена и год выпуска должны быть числом");
             }
         } else {
             System.out.println("Данное действие может выполнять только админ и менеджер");

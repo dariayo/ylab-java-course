@@ -5,6 +5,8 @@ import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
+import ru.dariayo.userInterface.UserInterface;
 
 public class DefaultCollectionFactory implements CollectionFactory {
     @Override
@@ -30,6 +32,11 @@ public class DefaultCollectionFactory implements CollectionFactory {
     @Override
     public CommandManager createCommandManager() {
         return new CommandManager(createPersonCollection(), createCarCollection(), createOrderCollection(),
-                createAuditLogRepository());
+                createAuditLogRepository(), createUserInterface());
+    }
+
+    @Override
+    public ConsoleUserInterface createUserInterface() {
+       return new ConsoleUserInterface();
     }
 }
