@@ -1,24 +1,23 @@
 package ru.dariayo.commands;
 
-import java.util.Scanner;
-
 import ru.dariayo.Command;
-import ru.dariayo.model.Person;
 import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
 
 public class FilterUsers extends Command {
     private final PersonCollection personCollection;
+    private final ConsoleUserInterface userInterface;
 
-    public FilterUsers(PersonCollection personCollection) {
+    public FilterUsers(PersonCollection personCollection, ConsoleUserInterface userInterface) {
         this.personCollection = personCollection;
+        this.userInterface = userInterface;
     }
 
     @Override
     public void execute() {
         if (!personCollection.getPerson().getRole().equals("user")) {
-            System.out.println("Введите по какому параметру вы хотите сортировать: name, contacts, orders");
-            Scanner scanner = new Scanner(System.in);
-            String param = scanner.nextLine();
+            String param = userInterface
+                    .getInput("Введите по какому параметру вы хотите сортировать: name, contacts, orders");
             personCollection.printSortedUsers(param);
         }
     }

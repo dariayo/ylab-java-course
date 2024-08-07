@@ -5,12 +5,15 @@ import java.util.Scanner;
 import ru.dariayo.Command;
 import ru.dariayo.model.Person;
 import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
 
 public class Register extends Command {
     private final PersonCollection personCollection;
+    private final ConsoleUserInterface userInterface;
 
-    public Register(PersonCollection personCollection) {
+    public Register(PersonCollection personCollection, ConsoleUserInterface userInterface) {
         this.personCollection = personCollection;
+        this.userInterface = userInterface;
 
     }
 
@@ -29,21 +32,17 @@ public class Register extends Command {
     }
 
     public String getUsername() {
-        System.out.println("Введите имя пользователя:");
-        return scanner.nextLine();
+        return userInterface.getInput("Введите имя пользователя:");
     }
 
     public String getPassword() {
-        System.out.println("Введите пароль:");
-        return scanner.nextLine();
+        return userInterface.getInput("Введите пароль:");
     }
 
     public String getRole() {
-        System.out.println("Выберите роль: admin, manager, user");
-        String role = scanner.nextLine();
+        String role = userInterface.getInput("Выберите роль: admin, manager, user");
         if (role.equals("admin") || role.equals("manager")) {
-            System.out.println("Введите пароль:");
-            if (scanner.nextLine() == pass) {
+            if (userInterface.getInput("Введите пароль:") == pass) {
                 return role;
             }
         }
@@ -51,8 +50,7 @@ public class Register extends Command {
     }
 
     public String getContacts() {
-        System.out.println("Введите почту:");
-        return scanner.nextLine();
+        return userInterface.getInput("Введите почту:");
     }
 
     @Override

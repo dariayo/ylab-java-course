@@ -4,25 +4,24 @@ import java.util.Scanner;
 
 import ru.dariayo.Command;
 import ru.dariayo.repositories.PersonCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
 
 public class Login extends Command {
 
     private final PersonCollection personCollection;
+    private final ConsoleUserInterface userInterface;
 
-    public Login(PersonCollection personCollection) {
+    public Login(PersonCollection personCollection, ConsoleUserInterface userInterface) {
         this.personCollection = personCollection;
+        this.userInterface = userInterface;
 
     }
 
     @Override
     public void execute() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Введите имя пользователя:");
-            String username = scanner.nextLine();
-            System.out.println("Введите пароль:");
-            String password = scanner.nextLine();
-            personCollection.checkUser(username, password);
-        }
+        String username = userInterface.getInput("Введите имя пользователя:");
+        String password = userInterface.getInput("Введите пароль:");
+        personCollection.checkUser(username, password);
     }
 
     @Override

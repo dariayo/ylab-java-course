@@ -4,21 +4,20 @@ import java.util.Scanner;
 
 import ru.dariayo.Command;
 import ru.dariayo.repositories.OrderCollection;
+import ru.dariayo.userInterface.ConsoleUserInterface;
 
 public class Search extends Command {
     private final OrderCollection orderCollection;
+    private final ConsoleUserInterface userInterface;
 
-    public Search(OrderCollection orderCollection) {
+    public Search(OrderCollection orderCollection, ConsoleUserInterface userInterface) {
         this.orderCollection = orderCollection;
+        this.userInterface = userInterface;
     }
 
-    // TODO
     @Override
     public void execute() {
-        System.out.println(
-                "Введите номер заказа");
-        Scanner scanner = new Scanner(System.in);
-        int id = Integer.parseInt(scanner.nextLine());
+        int id = Integer.parseInt(userInterface.getInput("Введите номер заказа"));
         orderCollection.getOrder(id);
     }
 
