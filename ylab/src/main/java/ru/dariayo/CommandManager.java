@@ -21,7 +21,7 @@ public class CommandManager {
         initializeCommand(new AddCar(carCollection, personCollection, userInterface));
         initializeCommand(new UpdateCar(carCollection, personCollection));
         initializeCommand(new RemoveCar(carCollection, personCollection));
-        initializeCommand(new Buy(personCollection, carCollection, orderCollection, userInterface));
+        initializeCommand(new BuyCar(personCollection, carCollection, orderCollection, userInterface));
         initializeCommand(new ShowUsers(personCollection));
         initializeCommand(new Cancel(orderCollection, userInterface));
         initializeCommand(new ChangeOrder(orderCollection, userInterface));

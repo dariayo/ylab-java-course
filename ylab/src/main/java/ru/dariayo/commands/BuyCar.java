@@ -8,13 +8,14 @@ import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;
 
-public class Buy extends Command {
+public class BuyCar extends Command {
     private final PersonCollection personCollection;
     private final OrderCollection orderCollection;
     private final CarCollection carCollection;
     private final ConsoleUserInterface userInterface;
 
-    public Buy(PersonCollection personCollection, CarCollection carCollection, OrderCollection orderCollection, ConsoleUserInterface userInterface) {
+    public BuyCar(PersonCollection personCollection, CarCollection carCollection, OrderCollection orderCollection,
+            ConsoleUserInterface userInterface) {
         this.personCollection = personCollection;
         this.carCollection = carCollection;
         this.orderCollection = orderCollection;
