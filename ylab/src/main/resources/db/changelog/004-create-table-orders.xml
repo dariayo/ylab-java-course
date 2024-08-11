@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+    logicalFilePath="db/changelog.xml">
+    <changeSet id="004-create-table-orders" author="ylab">
+        <createTable tableName="orders-liquibase">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="nameBuyer" type="VARCHAR(255)" />
+            <column name="status" type="VARCHAR(255)" />
+            <column name="mark" type="VARCHAR(255)" />
+            <column name="model" type="VARCHAR(255)" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

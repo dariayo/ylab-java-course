@@ -1,5 +1,6 @@
 package ru.dariayo.commands;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import ru.dariayo.Command;
@@ -23,7 +24,7 @@ public class BuyCar extends Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws SQLException {
         userInterface.showMessage("Выберите марку и модель автомобиля из списка: ");
         carCollection.showCars();
         System.out.println("Введите марку и модель автомобиля: ");

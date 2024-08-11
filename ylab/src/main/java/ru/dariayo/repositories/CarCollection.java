@@ -1,10 +1,12 @@
 package ru.dariayo.repositories;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
 
@@ -12,17 +14,19 @@ public class CarCollection {
     private TreeSet<Car> carCollection = new TreeSet<>();
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
+    private DBManager dbManager;
 
     public CarCollection(TreeSet<Car> carCollection) {
         this.carCollection = carCollection;
     }
 
-    public CarCollection(AuditLogRepository auditLogRepository) {
+    public CarCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
         this.auditLogRepository = auditLogRepository;
+        this.dbManager = dbManager;
     }
 
     public CarCollection() {
-        //TODO Auto-generated constructor stub
+       
     }
 
     /**
@@ -39,9 +43,10 @@ public class CarCollection {
      * add new car to treeset
      * 
      * @param car
+     * @throws SQLException 
      */
-    public void addCar(Car car) {
-        carCollection.add(car);
+    public void addCar(Car car) throws SQLException {
+        dbManager.addCar(car);
         logger.log(Level.INFO, "Add car: " + car.getMark());
         auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }

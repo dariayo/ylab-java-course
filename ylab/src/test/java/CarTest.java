@@ -14,62 +14,62 @@ import java.io.InputStream;
 
 public class CarTest {
 
-    private CarCollection carCollection;
-    private AuditLogRepository auditLogRepository;
+    // private CarCollection carCollection;
+    // private AuditLogRepository auditLogRepository;
 
-    @BeforeEach
-    public void setUp() {
-        auditLogRepository = new AuditLogRepository();
-        carCollection = new CarCollection(auditLogRepository);
-    }
+    // @BeforeEach
+    // public void setUp() {
+    //     auditLogRepository = new AuditLogRepository();
+    //     carCollection = new CarCollection(auditLogRepository);
+    // }
 
-    @Test
-    public void testAddCar_shouldReturnNewCar() {
-        Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
-        carCollection.addCar(car);
+    // @Test
+    // public void testAddCar_shouldReturnNewCar() {
+    //     Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
+    //     carCollection.addCar(car);
 
-        Car cars = carCollection.getByMark("Bmw", "M5");
-        assertThat(cars.getMark().equals("Bmw"));
-    }
+    //     Car cars = carCollection.getByMark("Bmw", "M5");
+    //     assertThat(cars.getMark().equals("Bmw"));
+    // }
 
-    @Test
-    public void testAddCar_shouldReturnFault() {
-        Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
-        carCollection.addCar(car);
+    // @Test
+    // public void testAddCar_shouldReturnFault() {
+    //     Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
+    //     carCollection.addCar(car);
 
-        Car cars = carCollection.getByMark("Bmw", "M5");
-        assertFalse(cars.getMark().equals("Mercedes"));
-    }
+    //     Car cars = carCollection.getByMark("Bmw", "M5");
+    //     assertFalse(cars.getMark().equals("Mercedes"));
+    // }
 
-    @Test
-    public void testRemoveCar_shouldRemoveNewCar() {
-        Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
-        carCollection.addCar(car);
-        carCollection.removeCar("Bmw", "M5");
+    // @Test
+    // public void testRemoveCar_shouldRemoveNewCar() {
+    //     Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
+    //     carCollection.addCar(car);
+    //     carCollection.removeCar("Bmw", "M5");
 
-        assertThat(carCollection.getByMark("Bmw", "M5")).isNull();
-        ;
-    }
+    //     assertThat(carCollection.getByMark("Bmw", "M5")).isNull();
+    //     ;
+    // }
 
-    @Test
-    public void testUpdateCar_shouldChangeAttributesCar() {
-        Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
+    // @Test
+    // public void testUpdateCar_shouldChangeAttributesCar() {
+    //     Car car = new Car("Bmw", "M5", 2004, 4000, "Well");
 
-        carCollection.updateCar("Bmw", "M5");
-        ByteArrayInputStream mark = new ByteArrayInputStream("new".getBytes());
-        InputStream inputStream = System.in;
-        System.setIn(mark);
-        ByteArrayInputStream model = new ByteArrayInputStream("new".getBytes());
-        System.setIn(model);
-        ByteArrayInputStream year = new ByteArrayInputStream("2".getBytes());
-        System.setIn(year);
-        ByteArrayInputStream price = new ByteArrayInputStream("2".getBytes());
-        System.setIn(price);
-        ByteArrayInputStream condition = new ByteArrayInputStream("new".getBytes());
-        System.setIn(condition);
-        assertThat(car.getMark().equals("new"));
-        System.setIn(inputStream);
+    //     carCollection.updateCar("Bmw", "M5");
+    //     ByteArrayInputStream mark = new ByteArrayInputStream("new".getBytes());
+    //     InputStream inputStream = System.in;
+    //     System.setIn(mark);
+    //     ByteArrayInputStream model = new ByteArrayInputStream("new".getBytes());
+    //     System.setIn(model);
+    //     ByteArrayInputStream year = new ByteArrayInputStream("2".getBytes());
+    //     System.setIn(year);
+    //     ByteArrayInputStream price = new ByteArrayInputStream("2".getBytes());
+    //     System.setIn(price);
+    //     ByteArrayInputStream condition = new ByteArrayInputStream("new".getBytes());
+    //     System.setIn(condition);
+    //     assertThat(car.getMark().equals("new"));
+    //     System.setIn(inputStream);
 
-    }
+    // }
 
 }

@@ -9,7 +9,6 @@ import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;
-import ru.dariayo.userInterface.UserInterface;
 
 public class DefaultCollectionFactory implements CollectionFactory {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
@@ -26,21 +25,22 @@ public class DefaultCollectionFactory implements CollectionFactory {
         DBManager dbManager;
 
         dbManager = new DBManager(URL, USER_NAME, PASSWORD);
-        dbManager.connectDB();
-        dbManager.createTablePerson();
-        System.out.println("sss");
+        // dbManager.connectDB();
+        // dbManager.createTablePerson();
+        // dbManager.createTableCars();
+        // dbManager.createTableOrders();
         return dbManager;
 
     }
 
     @Override
-    public CarCollection createCarCollection() {
-        return new CarCollection(createAuditLogRepository());
+    public CarCollection createCarCollection() throws SQLException {
+        return new CarCollection(createAuditLogRepository(), createDbManager());
     }
 
     @Override
-    public OrderCollection createOrderCollection() {
-        return new OrderCollection(createAuditLogRepository());
+    public OrderCollection createOrderCollection() throws SQLException {
+        return new OrderCollection(createAuditLogRepository(), createDbManager());
     }
 
     @Override

@@ -13,8 +13,8 @@ import ru.dariayo.userInterface.UserInterface;
 
 public interface CollectionFactory {
     PersonCollection createPersonCollection() throws SQLException;
-    CarCollection createCarCollection();
-    OrderCollection createOrderCollection();
+    CarCollection createCarCollection() throws SQLException;
+    OrderCollection createOrderCollection() throws SQLException;
     AuditLogRepository createAuditLogRepository();
     CommandManager createCommandManager() throws SQLException;
     ConsoleUserInterface createUserInterface();

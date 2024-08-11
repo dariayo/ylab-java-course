@@ -1,10 +1,12 @@
 package ru.dariayo.repositories;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Order;
 import ru.dariayo.model.Person;
@@ -13,13 +15,15 @@ public class OrderCollection {
     private TreeSet<Order> orderCollection = new TreeSet<>();
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
+    private DBManager dbManager;
 
     public OrderCollection(TreeSet<Order> orderCollection) {
         this.orderCollection = orderCollection;
     }
 
-    public OrderCollection(AuditLogRepository auditLogRepository) {
+    public OrderCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
         this.auditLogRepository = auditLogRepository;
+        this.dbManager = dbManager;
     }
 
     /**
@@ -29,11 +33,11 @@ public class OrderCollection {
      * @param mark
      * @param model
      * @param carCollection
+     * @throws SQLException 
      */
-    public void makeOrder(Person person, String mark, String model, CarCollection carCollection) {
+    public void makeOrder(Person person, String mark, String model, CarCollection carCollection) throws SQLException {
         Order order = new Order(person.getName(), "Placed", carCollection.getByMark(mark, model));
-        orderCollection.add(order);
-        System.out.println(order.getCar().getPrice());
+        dbManager.addOrder(order);
         logger.log(Level.INFO, "Create order: " + order.getId());
         auditLogRepository.logAction("System", "Create order",
                 "Number: " + order.getId() + " By user: " + order.getNameBuyer());
