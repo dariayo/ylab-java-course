@@ -11,22 +11,16 @@ import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
 
 public class CarCollection {
-    private TreeSet<Car> carCollection = new TreeSet<>();
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
     private DBManager dbManager;
 
-    public CarCollection(TreeSet<Car> carCollection) {
-        this.carCollection = carCollection;
+    public CarCollection() {
     }
 
     public CarCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
         this.auditLogRepository = auditLogRepository;
         this.dbManager = dbManager;
-    }
-
-    public CarCollection() {
-
     }
 
     /**

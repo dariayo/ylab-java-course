@@ -239,4 +239,32 @@ public class DBManager {
         } catch (Exception e) {
         }
     }
+
+    public boolean userLogin(String username, String password) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.users WHERE username = ? AND password = ?")) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
+    public void infoUsers() {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cs_schema.users")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println("Имя: " + resultSet.getString("username") + " роль: "
+                            + resultSet.getString("role"));
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
 }

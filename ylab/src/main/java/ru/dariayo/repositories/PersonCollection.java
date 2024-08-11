@@ -11,14 +11,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class PersonCollection {
-    private TreeSet<Person> personCollection = new TreeSet<>();
     private Person person;
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
     private DBManager dbManager;
 
-    public PersonCollection(TreeSet<Person> personCollection) {
-        this.personCollection = personCollection;
+    public PersonCollection() {
     }
 
     public PersonCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
@@ -30,7 +28,7 @@ public class PersonCollection {
      * add person to treeset
      * 
      * @param person
-     * @throws SQLException 
+     * @throws SQLException
      */
     public void addPerson(Person person) throws SQLException {
         dbManager.registerUser(person);
@@ -46,13 +44,12 @@ public class PersonCollection {
      * @param password
      */
     public void checkUser(String username, String password) {
-        for (Person person : personCollection) {
-            if (person.getName().equals(username) && person.getPassword().equals(password)) {
-                setPerson(person);
-                logger.log(Level.INFO, "Пользователь авторизирован: " + person.getName());
-                auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
-                System.out.println("Добро пожаловать, " + person.getName());
-            }
+        if (dbManager.userLogin(username, password)) {
+            setPerson(person);
+            logger.log(Level.INFO, "Пользователь авторизирован: " + person.getName());
+            auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
+            System.out.println("Добро пожаловать, " + person.getName());
+
         }
     }
 
@@ -68,10 +65,7 @@ public class PersonCollection {
      * print information about users
      */
     public void info() {
-        for (Person person : personCollection) {
-            System.out.println(person.getName());
-            System.out.println(person.getRole());
-        }
+        dbManager.infoUsers();
     }
 
     /**
@@ -79,30 +73,31 @@ public class PersonCollection {
      * 
      * @param param
      */
-    public void printSortedUsers(String param) {
-        TreeSet<Person> sortedCollection;
+    // public void printSortedUsers(String param) {
+    // TreeSet<Person> sortedCollection;
 
-        switch (param) {
-            case "name":
-                sortedCollection = new TreeSet<>(new PersonNameComparator());
-                break;
-            case "contacts":
-                sortedCollection = new TreeSet<>(new PersonContactsComparator());
-                break;
-            case "orders":
-                sortedCollection = new TreeSet<>(new PersonOrdersComparator());
-                break;
-            default:
-                System.out.println("Invalid sort parameter.");
-                return;
-        }
+    // switch (param) {
+    // case "name":
+    // sortedCollection = new TreeSet<>(new PersonNameComparator());
+    // break;
+    // case "contacts":
+    // sortedCollection = new TreeSet<>(new PersonContactsComparator());
+    // break;
+    // case "orders":
+    // sortedCollection = new TreeSet<>(new PersonOrdersComparator());
+    // break;
+    // default:
+    // System.out.println("Invalid sort parameter.");
+    // return;
+    // }
 
-        sortedCollection.addAll(personCollection);
+    // sortedCollection.addAll(personCollection);
 
-        for (Person person : sortedCollection) {
-            System.out.println(person.getName() + ", " + person.getRole() + ", " + person.getContacts() + ", "
-                    + person.getCountOrders());
-        }
-    }
+    // for (Person person : sortedCollection) {
+    // System.out.println(person.getName() + ", " + person.getRole() + ", " +
+    // person.getContacts() + ", "
+    // + person.getCountOrders());
+    // }
+    // }
 
 }

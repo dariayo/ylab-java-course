@@ -12,13 +12,11 @@ import ru.dariayo.model.Order;
 import ru.dariayo.model.Person;
 
 public class OrderCollection {
-    private TreeSet<Order> orderCollection = new TreeSet<>();
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
     private DBManager dbManager;
 
-    public OrderCollection(TreeSet<Order> orderCollection) {
-        this.orderCollection = orderCollection;
+    public OrderCollection() {
     }
 
     public OrderCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
