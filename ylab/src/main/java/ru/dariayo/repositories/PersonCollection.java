@@ -33,7 +33,6 @@ public class PersonCollection {
      * @throws SQLException 
      */
     public void addPerson(Person person) throws SQLException {
-        // this.personCollection.add(person);
         dbManager.registerUser(person);
         setPerson(person);
         logger.log(Level.INFO, "Added person: " + person.getName());

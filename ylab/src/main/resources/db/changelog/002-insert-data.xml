@@ -5,34 +5,12 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
     logicalFilePath="db/changelog.xml">
     <changeSet id="002-insert-data" author="ylab">
-        <insert tableName="users-liquibase">
+        <insert tableName="users" schemaName="cs_schema">
             <column name="id" valueNumeric="1" />
             <column name="username" value="user1" />
             <column name="password" value="1233" />
             <column name="role" value="user" />
             <column name="contacts" value="user1@example.com" />
-        </insert>
-        <insert tableName="users-liquibase">
-            <column name="id" valueNumeric="2" />
-            <column name="username" value="user2" />
-            <column name="password" value="123334" />
-            <column name="role" value="user" />
-            <column name="contacts" value="user2@example.com" />
-        </insert>
-        <insert tableName="cars-liquibase">
-            <column name="id" valueNumeric="1" />
-            <column name="mark" value="bmw" />
-            <column name="model" value="m5" />
-            <column name="year" value="2010" />
-            <column name="price" value="200000" />
-            <column name="condition" value="new" />
-        </insert>
-        <insert tableName="orders-liquibase">
-            <column name="id" valueNumeric="1" />
-            <column name="nameBuyer" value="user1" />
-            <column name="status" value="create" />
-            <column name="mark" value="bmw" />
-            <column name="model" value="x5" />
         </insert>
     </changeSet>
 </databaseChangeLog>

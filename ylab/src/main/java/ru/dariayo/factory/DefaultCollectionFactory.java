@@ -25,10 +25,7 @@ public class DefaultCollectionFactory implements CollectionFactory {
         DBManager dbManager;
 
         dbManager = new DBManager(URL, USER_NAME, PASSWORD);
-        // dbManager.connectDB();
-        // dbManager.createTablePerson();
-        // dbManager.createTableCars();
-        // dbManager.createTableOrders();
+        dbManager.connectDB();
         return dbManager;
 
     }

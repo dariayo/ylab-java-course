@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
-    logicalFilePath="db/changelog.xml">
-    <changeSet id="001-create-table" author="ylab">
-        <createTable tableName="users-liquibase">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="username" type="VARCHAR(255)" />
-            <column name="password" type="VARCHAR(255)" />
-            <column name="role" type="VARCHAR(255)" />
-            <column name="contacts" type="VARCHAR(255)" />
-        </createTable>
-        <createTable tableName="cars-liquibase">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="model" type="VARCHAR(255)" />
-            <column name="mark" type="VARCHAR(255)" />
-            <column name="year" type="VARCHAR(255)" />
-            <column name="price" type="VARCHAR(255)" />
-            <column name="condition" type="VARCHAR(255)" />
-        </createTable>
-        <createTable tableName="orders-liquibase">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="nameBuyer" type="VARCHAR(255)" />
-            <column name="status" type="VARCHAR(255)" />
-            <column name="mark" type="VARCHAR(255)" />
-            <column name="model" type="VARCHAR(255)" />
-        </createTable>
-    </changeSet>
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <property name="now" value="now()" dbms="postgresql" />
+    <changeSet id="01" author="ylab">
 
+        <createSequence
+            startValue="1"
+            incrementBy="1"
+            sequenceName="users" />
+
+        <createSequence
+            startValue="1"
+            incrementBy="1"
+            sequenceName="cars" />
+
+        <createSequence
+            startValue="1"
+            incrementBy="1"
+            sequenceName="orders" />
+
+        <sql> CREATE SCHEMA IF NOT EXISTS cs_schema; </sql>
+
+        <createTable tableName="users" schemaName="cs_schema">
+            <column name="id" type="int" defaultValueComputed="nextval('users')" />
+            <column name="username" type="varchar(50)" />
+            <column name="password" type="varchar(50)" />
+            <column name="role" type="varchar(100)" />
+            <column name="contacts" type="varchar(1000)" />
+        </createTable>
+
+        <createTable tableName="cars" schemaName="cs_schema">
+            <column name="id" type="int" defaultValueComputed="nextval('cars')" />
+            <column name="mark" type="varchar(50)" />
+            <column name="model" type="varchar(50)" />
+            <column name="year" type="int" />
+            <column name="price" type="int" />
+            <column name="condition" type="varchar(50)" />
+        </createTable>
+
+        <createTable tableName="orders" schemaName="cs_schema">
+            <column name="id" type="int" defaultValueComputed="nextval('orders')" />
+            <column name="nameBuyer" type="varchar(50)" />
+            <column name="status" type="varchar(50)" />
+            <column name="mark" type="varchar(50)" />
+            <column name="model" type="varchar(50)" />
+        </createTable>
+
+    </changeSet>
 </databaseChangeLog>
