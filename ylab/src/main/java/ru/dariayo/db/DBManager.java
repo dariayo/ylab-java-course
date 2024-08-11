@@ -32,6 +32,8 @@ public class DBManager {
     private static final String SQL_ADD_ORDER = String.format("INSERT INTO %s (%s,%s,%s) VALUES (?, ?, ?)",
             TABLE_ORDER, "nameBuyer", "status", "mark");
 
+    private static final String SQL_FIND_USER = String.format("SELECT * FROM %s WHERE %s = ?", TABLE_USER, USERNAME);
+
     public DBManager(String url, String username, String password) {
         this.url = url;
         this.username = username;
@@ -240,20 +242,22 @@ public class DBManager {
         }
     }
 
-    public boolean userLogin(String username, String password) {
+    public Person userLogin(String username, String password) {
         try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT FROM cs_schema.users WHERE username = ? AND password = ?")) {
+                SQL_FIND_USER)) {
             statement.setString(1, username);
-            statement.setString(2, password);
+            // statement.setString(2, password);
             statement.execute();
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    return true;
+                    Person person = new Person(resultSet.getString("username"), resultSet.getString("password"),
+                            resultSet.getString("role"), resultSet.getString("contacts"));
+                    return person;
                 }
             }
         } catch (Exception e) {
         }
-        return false;
+        return null;
     }
 
     public void infoUsers() {

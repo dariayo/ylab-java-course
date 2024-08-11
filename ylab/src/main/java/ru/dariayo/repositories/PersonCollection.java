@@ -1,9 +1,7 @@
 package ru.dariayo.repositories;
 
 import java.sql.SQLException;
-import java.util.TreeSet;
 
-import ru.dariayo.comparator.*;
 import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Person;
@@ -44,7 +42,8 @@ public class PersonCollection {
      * @param password
      */
     public void checkUser(String username, String password) {
-        if (dbManager.userLogin(username, password)) {
+        Person person = dbManager.userLogin(username, password);
+        if (person != null) {
             setPerson(person);
             logger.log(Level.INFO, "Пользователь авторизирован: " + person.getName());
             auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
