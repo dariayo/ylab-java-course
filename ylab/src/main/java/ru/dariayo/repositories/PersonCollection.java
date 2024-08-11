@@ -1,8 +1,10 @@
 package ru.dariayo.repositories;
 
+import java.sql.SQLException;
 import java.util.TreeSet;
 
 import ru.dariayo.comparator.*;
+import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Person;
 import java.util.logging.Level;
@@ -13,22 +15,26 @@ public class PersonCollection {
     private Person person;
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
+    private DBManager dbManager;
 
     public PersonCollection(TreeSet<Person> personCollection) {
         this.personCollection = personCollection;
     }
 
-    public PersonCollection(AuditLogRepository auditLogRepository) {
+    public PersonCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
         this.auditLogRepository = auditLogRepository;
+        this.dbManager = dbManager;
     }
 
     /**
      * add person to treeset
      * 
      * @param person
+     * @throws SQLException 
      */
-    public void addPerson(Person person) {
-        this.personCollection.add(person);
+    public void addPerson(Person person) throws SQLException {
+        // this.personCollection.add(person);
+        dbManager.registerUser(person);
         setPerson(person);
         logger.log(Level.INFO, "Added person: " + person.getName());
         auditLogRepository.logAction("System", "Add Person", "Added person: " + person.getName());

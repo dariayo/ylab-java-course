@@ -1,6 +1,7 @@
 package ru.dariayo;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import ru.dariayo.config.AppConfig;
@@ -8,8 +9,10 @@ import ru.dariayo.factory.CollectionFactory;
 import ru.dariayo.factory.DefaultCollectionFactory;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws IOException, SQLException {
         try (Scanner scanner = new Scanner(System.in)) {
+
             CollectionFactory factory = new DefaultCollectionFactory();
             AppConfig appConfig = new AppConfig(factory);
 

@@ -1,5 +1,7 @@
 package ru.dariayo.config;
 
+import java.sql.SQLException;
+
 import ru.dariayo.factory.CollectionFactory;
 import ru.dariayo.model.Car;
 import ru.dariayo.model.Person;
@@ -10,13 +12,13 @@ public class AppConfig {
     private final PersonCollection personCollection;
     private final CarCollection carCollection;
 
-    public AppConfig(CollectionFactory factory) {
+    public AppConfig(CollectionFactory factory) throws SQLException {
         this.personCollection = factory.createPersonCollection();
         this.carCollection = factory.createCarCollection();
         initializeDefaults();
     }
 
-    private void initializeDefaults() {
+    private void initializeDefaults() throws SQLException {
         Person person = new Person("Mike", "1234", "user", "mike@gmail.com");
         personCollection.addPerson(person);
         Person person1 = new Person("Katya", "567", "user", "katya@yandex.ru");
