@@ -1,6 +1,5 @@
 package ru.dariayo.repositories;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -34,10 +33,7 @@ public class CarCollection {
      * information about all cars
      */
     public void showCars() {
-        for (Car car : carCollection) {
-            System.out.println("Марка: " + car.getMark() + " модель: " + car.getModel() + " год выпуска: "
-                    + car.getYearOfIssue() + " цена: " + car.getPrice() + " состояние: " + car.getCondition());
-        }
+        dbManager.showCars();
     }
 
     /**

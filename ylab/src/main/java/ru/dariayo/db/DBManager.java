@@ -29,8 +29,8 @@ public class DBManager {
             TABLE_USER, USERNAME, PASSWORD, ROLE, CONTACTS);
     private static final String SQL_ADD_CAR = String.format("INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?, ?, ?, ?, ?)",
             TABLE_CAR, "mark", "model", "year", "price", "condition");
-    private static final String SQL_ADD_ORDER = String.format("INSERT INTO %s (%s,%s,%s,%s) VALUES (?, ?, ?, ?)",
-            TABLE_ORDER, "nameBuyer", "status", "mark", "model");
+    private static final String SQL_ADD_ORDER = String.format("INSERT INTO %s (%s,%s,%s) VALUES (?, ?, ?)",
+            TABLE_ORDER, "nameBuyer", "status", "mark");
 
     public DBManager(String url, String username, String password) {
         this.url = url;
@@ -88,8 +88,7 @@ public class DBManager {
         PreparedStatement statement = connection.prepareStatement(SQL_ADD_ORDER);
         statement.setString(1, order.getNameBuyer());
         statement.setString(2, order.getStatus());
-        statement.setString(3, order.getCar().getMark());
-        statement.setString(4, order.getCar().getMark());
+        statement.setString(3, order.getCar());
         statement.executeUpdate();
         statement.close();
     }
@@ -178,5 +177,66 @@ public class DBManager {
         } catch (Exception e) {
         }
         return null;
+    }
+
+    public void showCars() {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cs_schema.cars")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println("Марка: " + resultSet.getString("mark") + " модель: "
+                            + resultSet.getString("model") + " год выпуска: "
+                            + resultSet.getInt("year") + " цена: " + resultSet.getInt("price") + " состояние: "
+                            + resultSet.getString("condition"));
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public Order searchOrderByParam(String arg, String param) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.orders WHERE ? = ? ")) {
+            statement.setString(1, param);
+            statement.setString(2, arg);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Order order = new Order(
+                            resultSet.getString("nameBuyer"),
+                            resultSet.getString("status"),
+                            resultSet.getString("mark"));
+                    return order;
+                }
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public void getOrderById(int id) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.orders WHERE id = ? ")) {
+            statement.setInt(1, id);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    System.out.println("Покупатель: " + resultSet.getString("nameBuyer") + " Статус заказа: "
+                            + resultSet.getString("status")
+                            + " Автомобиль: " + resultSet.getString("mark"));
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+
+    public void changeStatusOrder(int id, String status) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE cs_schema.orders SET status = ?" +
+                        " WHERE id = ? ")) {
+            statement.setString(1, status);
+            statement.setInt(2, id);
+            statement.execute();
+        } catch (Exception e) {
+        }
     }
 }

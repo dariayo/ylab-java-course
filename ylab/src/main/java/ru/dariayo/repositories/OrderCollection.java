@@ -33,10 +33,10 @@ public class OrderCollection {
      * @param mark
      * @param model
      * @param carCollection
-     * @throws SQLException 
+     * @throws SQLException
      */
     public void makeOrder(Person person, String mark, String model, CarCollection carCollection) throws SQLException {
-        Order order = new Order(person.getName(), "Placed", carCollection.getByMark(mark, model));
+        Order order = new Order(person.getName(), "Placed", mark);
         dbManager.addOrder(order);
         logger.log(Level.INFO, "Create order: " + order.getId());
         auditLogRepository.logAction("System", "Create order",
@@ -50,26 +50,14 @@ public class OrderCollection {
      * @param status
      */
     public void changeStatus(int id, String status) {
-        for (Order order : orderCollection) {
-            if (order.getId() == id) {
-                order.setStatus(status);
-                logger.log(Level.INFO, "Update order: " + order.getId());
-                auditLogRepository.logAction("System", "Update order",
-                        "Number: " + order.getId() + " New status: " + order.getStatus());
-            }
-        }
+        dbManager.changeStatusOrder(id, status);
     }
 
     /**
      * get order by id
      */
     public void getOrder(int id) {
-        for (Order order : orderCollection) {
-            if (order.getId() == id) {
-                System.out.println("Покупатель: " + order.getNameBuyer() + " Статус заказа: " + order.getStatus()
-                        + " Автомобиль: " + order.getCar().getModel());
-            }
-        }
+        dbManager.getOrderById(id);
     }
 
     /**
@@ -82,33 +70,7 @@ public class OrderCollection {
         System.out.println("Введите параметр поиска");
         Scanner scanner = new Scanner(System.in);
         String arg = scanner.nextLine();
-        switch (param) {
-            case "client":
-                for (Order order : orderCollection) {
-                    if (order.getNameBuyer().equals(arg)) {
-                        orders.add(order);
-                    }
-                }
-                break;
-            case "status":
-                for (Order order : orderCollection) {
-                    if (order.getStatus().equals(arg)) {
-                        orders.add(order);
-                    }
-                }
-                break;
-            case "car":
-                for (Order order : orderCollection) {
-                    if (order.getCar().equals(arg)) {
-                        orders.add(order);
-                    }
-                }
-                break;
-            default:
-                System.out.println("Invalid sort parameter.");
-                return;
-        }
-
+        orders.add(dbManager.searchOrderByParam(arg, param));
         for (Order order : orders) {
             System.out.println(order.getNameBuyer() + ", " + order.getCar() + ", " + order.getStatus());
         }
