@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.net.URL;
 
-
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -34,10 +33,11 @@ public class LiquibaseManager {
             String url = properties.getProperty("db.url");
             String user = properties.getProperty("db.user");
             String password = properties.getProperty("db.password");
+            String path = properties.getProperty("liquibase.changelog.path");
             connection = DriverManager.getConnection(url, user, password);
             Database database = DatabaseFactory.getInstance()
                     .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase("db/changelog/changelog.xml", new ClassLoaderResourceAccessor(),
+            Liquibase liquibase = new Liquibase(path, new ClassLoaderResourceAccessor(),
                     database);
             liquibase.update();
             System.out.println("Migration is completed successfully");
