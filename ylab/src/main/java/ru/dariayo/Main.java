@@ -1,10 +1,8 @@
 package ru.dariayo;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import liquibase.exception.LiquibaseException;
 import ru.dariayo.factory.CollectionFactory;
 import ru.dariayo.factory.DefaultCollectionFactory;
 
