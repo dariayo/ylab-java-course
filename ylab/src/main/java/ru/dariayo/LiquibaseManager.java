@@ -19,6 +19,9 @@ public class LiquibaseManager {
     public LiquibaseManager() {
     }
 
+    /**
+     * connect with liquibase
+     */
     public void createBase() {
         Connection connection;
         try {
