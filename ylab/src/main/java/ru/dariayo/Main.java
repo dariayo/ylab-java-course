@@ -1,17 +1,18 @@
 package ru.dariayo;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
-import ru.dariayo.config.AppConfig;
 import ru.dariayo.factory.CollectionFactory;
 import ru.dariayo.factory.DefaultCollectionFactory;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
+            LiquibaseManager liquibaseManager = new LiquibaseManager();
+            liquibaseManager.createBase();
             CollectionFactory factory = new DefaultCollectionFactory();
-            AppConfig appConfig = new AppConfig(factory);
 
             CommandManager commandManager = factory.createCommandManager();
             System.out.println("Введите команду login для входа или register для регистрации, help - все команды");
@@ -24,6 +25,8 @@ public class Main {
 
             } while (!input.equals("exit"));
             // auditLogRepository.exportLogsToFile("audit_log.txt");
+        } catch (SQLException e) {
+            System.out.println("SQL Exception in migration " + e.getMessage());
         }
     }
 }

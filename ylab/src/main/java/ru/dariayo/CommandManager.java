@@ -1,5 +1,6 @@
 package ru.dariayo;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import ru.dariayo.commands.*;
@@ -35,8 +36,9 @@ public class CommandManager {
      * check command when user input
      * 
      * @param command
+     * @throws SQLException 
      */
-    public void existCommand(String command) {
+    public void existCommand(String command) throws SQLException {
         if (commands.containsKey(command)) {
             commands.get(command).execute();
         } else {

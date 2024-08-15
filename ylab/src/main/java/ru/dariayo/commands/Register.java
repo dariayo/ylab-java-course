@@ -1,5 +1,6 @@
 package ru.dariayo.commands;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import ru.dariayo.Command;
@@ -21,7 +22,7 @@ public class Register extends Command {
     String pass = "123";
 
     @Override
-    public void execute() {
+    public void execute() throws SQLException {
         String username = getUsername();
         String password = getPassword();
         String role = getRole();

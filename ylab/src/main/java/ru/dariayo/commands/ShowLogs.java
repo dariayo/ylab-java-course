@@ -2,7 +2,6 @@ package ru.dariayo.commands;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Scanner;
 
 import ru.dariayo.Command;
 import ru.dariayo.log.AuditLog;

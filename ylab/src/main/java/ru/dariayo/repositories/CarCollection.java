@@ -1,37 +1,48 @@
 package ru.dariayo.repositories;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
 
 public class CarCollection {
-    private TreeSet<Car> carCollection = new TreeSet<>();
+    private static final String TABLE_CAR = "cs_schema.cars";
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
-
-    public CarCollection(TreeSet<Car> carCollection) {
-        this.carCollection = carCollection;
-    }
-
-    public CarCollection(AuditLogRepository auditLogRepository) {
-        this.auditLogRepository = auditLogRepository;
-    }
+    private Connection connection;
+    private static final String SQL_ADD_CAR = String.format("INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?, ?, ?, ?, ?)",
+            TABLE_CAR, "mark", "model", "year", "price", "condition");
 
     public CarCollection() {
-        //TODO Auto-generated constructor stub
+    }
+
+    public CarCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
+        this.auditLogRepository = auditLogRepository;
+        this.connection = dbManager.connectDB();
     }
 
     /**
      * information about all cars
      */
     public void showCars() {
-        for (Car car : carCollection) {
-            System.out.println("Марка: " + car.getMark() + " модель: " + car.getModel() + " год выпуска: "
-                    + car.getYearOfIssue() + " цена: " + car.getPrice() + " состояние: " + car.getCondition());
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cs_schema.cars")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    System.out.println("Марка: " + resultSet.getString("mark") + " модель: "
+                            + resultSet.getString("model") + " год выпуска: "
+                            + resultSet.getInt("year") + " цена: " + resultSet.getInt("price") + " состояние: "
+                            + resultSet.getString("condition"));
+                }
+            }
+        } catch (Exception e) {
         }
     }
 
@@ -39,9 +50,17 @@ public class CarCollection {
      * add new car to treeset
      * 
      * @param car
+     * @throws SQLException
      */
-    public void addCar(Car car) {
-        carCollection.add(car);
+    public void addCar(Car car) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(SQL_ADD_CAR);
+        statement.setString(1, car.getMark());
+        statement.setString(2, car.getModel());
+        statement.setInt(3, car.getPrice());
+        statement.setInt(4, car.getYearOfIssue());
+        statement.setString(5, car.getCondition());
+        statement.executeUpdate();
+        statement.close();
         logger.log(Level.INFO, "Add car: " + car.getMark());
         auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }
@@ -53,15 +72,18 @@ public class CarCollection {
      * @param model
      */
     public void removeCar(String mark, String model) {
-        for (Car car : carCollection) {
-            if (car.getModel().equals(model) && car.getMark().equals(mark)) {
-                logger.log(Level.INFO, "Remove car: " + car.getMark());
-                auditLogRepository.logAction("System", "Remove car",
-                        "Mark: " + car.getMark() + " Model: " + car.getModel());
-                carCollection.remove(car);
-                System.out.println("Автомобиль удален");
-            }
+        try (PreparedStatement statement = connection
+                .prepareStatement("DELETE FROM cs_schema.cars WHERE mark = ? AND model = ?")) {
+            statement.setString(1, mark);
+            statement.setString(2, model);
+            statement.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        logger.log(Level.INFO, "Remove car: " + mark);
+        auditLogRepository.logAction("System", "Remove car",
+                "Mark: " + mark + " Model: " + model);
+        System.out.println("Автомобиль удален");
     }
 
     /**
@@ -71,24 +93,33 @@ public class CarCollection {
      * @param model
      */
     public void updateCar(String mark, String model) {
-        for (Car car : carCollection) {
-            if (car.getModel().equals(model) && car.getMark().equals(mark)) {
-                try (Scanner scanner = new Scanner(System.in)) {
-                    System.out.println("Введите марку автомобиля: ");
-                    car.setMark(scanner.nextLine());
-                    System.out.println("Введите модель автомобиля: ");
-                    car.setModel(scanner.nextLine());
-                    System.out.println("Введите год выпуска автомобиля: ");
-                    car.setYearOfIssue(Integer.parseInt(scanner.nextLine()));
-                    System.out.println("Введите цену автомобиля: ");
-                    car.setPrice(Integer.parseInt(scanner.nextLine()));
-                    System.out.println("Введите состояние автомобиля: ");
-                    car.setCondition(scanner.nextLine());
-                    logger.log(Level.INFO, "Update car: " + car.getMark());
-                    auditLogRepository.logAction("System", "Update car",
-                            "Mark: " + car.getMark() + " Model: " + car.getModel());
-                }
-            }
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите марку автомобиля: ");
+        String markNew = scanner.nextLine();
+        System.out.println("Введите модель автомобиля: ");
+        String modelNew = (scanner.nextLine());
+        System.out.println("Введите год выпуска автомобиля: ");
+        int year = (Integer.parseInt(scanner.nextLine()));
+        System.out.println("Введите цену автомобиля: ");
+        int price = (Integer.parseInt(scanner.nextLine()));
+        System.out.println("Введите состояние автомобиля: ");
+        String condition = (scanner.nextLine());
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE cs_schema.cars SET mark = ?," +
+                        " model = ?," +
+                        " year= ?," +
+                        " price = ?," +
+                        " condition = ?," +
+                        " WHERE mark = ? AND model = ?")) {
+            statement.setString(1, markNew);
+            statement.setString(2, modelNew);
+            statement.setInt(3, year);
+            statement.setInt(4, price);
+            statement.setString(5, condition);
+            statement.setString(6, mark);
+            statement.setString(7, model);
+            statement.execute();
+        } catch (Exception e) {
         }
     }
 
@@ -100,10 +131,23 @@ public class CarCollection {
      * @return
      */
     public Car getByMark(String mark, String model) {
-        for (Car car : carCollection) {
-            if (car.getMark().equals(mark) && car.getModel().equals(model)) {
-                return car;
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.cars WHERE mark = ? and model = ?")) {
+            statement.setString(1, mark);
+            statement.setString(2, model);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Car car = new Car(
+                            resultSet.getString("mark"),
+                            resultSet.getString("model"),
+                            resultSet.getInt("year"),
+                            resultSet.getInt("price"),
+                            resultSet.getString("condition"));
+                    return car;
+                }
             }
+        } catch (Exception e) {
         }
         return null;
     }
@@ -118,40 +162,24 @@ public class CarCollection {
         System.out.println("Введите параметр поиска");
         Scanner scanner = new Scanner(System.in);
         String arg = scanner.nextLine();
-        switch (param) {
-            case "mark":
-                for (Car car : carCollection) {
-                    if (car.getMark().equals(arg)) {
-                        cars.add(car);
-                    }
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.cars WHERE ? = ? ")) {
+            statement.setString(1, param);
+            statement.setString(2, arg);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Car car = new Car(
+                            resultSet.getString("mark"),
+                            resultSet.getString("model"),
+                            resultSet.getInt("year"),
+                            resultSet.getInt("price"),
+                            resultSet.getString("condition"));
+                    cars.add(car);
                 }
-                break;
-            case "model":
-                for (Car car : carCollection) {
-                    if (car.getModel().equals(arg)) {
-                        cars.add(car);
-                    }
-                }
-                break;
-            case "price":
-                for (Car car : carCollection) {
-                    if (car.getPrice() == Integer.parseInt(arg)) {
-                        cars.add(car);
-                    }
-                }
-                break;
-            case "year":
-                for (Car car : carCollection) {
-                    if (car.getYearOfIssue() == Integer.parseInt(arg)) {
-                        cars.add(car);
-                    }
-                }
-                break;
-            default:
-                System.out.println("Invalid sort parameter.");
-                return;
+            }
+        } catch (Exception e) {
         }
-
         for (Car car : cars) {
             System.out.println(car.getMark() + ", " + car.getModel() + ", " + car.getPrice());
         }

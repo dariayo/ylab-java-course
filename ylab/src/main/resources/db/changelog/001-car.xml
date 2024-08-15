@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd"
+    logicalFilePath="db/changelog.xml">
+    <property name="now" value="now()" dbms="postgresql" />
+    <changeSet id="01-car-create" author="ylab">
+
+        <createSequence
+            startValue="1"
+            incrementBy="1"
+            sequenceName="cars" />
+
+        <sql> CREATE SCHEMA IF NOT EXISTS cs_schema; </sql>
+
+        <createTable tableName="cars" schemaName="cs_schema">
+            <column name="id" type="int" defaultValueComputed="nextval('cars')" />
+            <column name="mark" type="varchar(50)" />
+            <column name="model" type="varchar(50)" />
+            <column name="year" type="int" />
+            <column name="price" type="int" />
+            <column name="condition" type="varchar(50)" />
+        </createTable>
+
+    </changeSet>
+    <changeSet id="01-car-insert" author="ylab">
+        <insert tableName="cars" schemaName="cs_schema">
+            <column name="id" valueNumeric="1" />
+            <column name="mark" value="toyota" />
+            <column name="model" value="corolla" />
+            <column name="year" value="2004" />
+            <column name="price" value="300000" />
+            <column name="condition" value="good" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>

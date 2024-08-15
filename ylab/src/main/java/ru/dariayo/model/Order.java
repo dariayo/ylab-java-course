@@ -5,9 +5,9 @@ public class Order implements Comparable<Order> {
     private int id;
     private String nameBuyer;
     private String status;
-    private Car car;
+    private String car;
 
-    public Order(String nameBuyer, String status, Car car) {
+    public Order(String nameBuyer, String status, String car) {
         this.id = ++currentId;
         this.nameBuyer = nameBuyer;
         this.status = status;
@@ -34,11 +34,11 @@ public class Order implements Comparable<Order> {
         this.status = status;
     }
 
-    public Car getCar() {
+    public String getCar() {
         return car;
     }
 
-    public void setCar(Car car) {
+    public void setCar(String car) {
         this.car = car;
     }
 

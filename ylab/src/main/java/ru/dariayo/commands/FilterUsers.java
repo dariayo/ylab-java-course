@@ -18,7 +18,7 @@ public class FilterUsers extends Command {
         if (!personCollection.getPerson().getRole().equals("user")) {
             String param = userInterface
                     .getInput("Введите по какому параметру вы хотите сортировать: name, contacts, orders");
-            personCollection.printSortedUsers(param);
+            // personCollection.printSortedUsers(param);
         }
     }
 

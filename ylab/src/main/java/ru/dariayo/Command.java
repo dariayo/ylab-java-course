@@ -1,9 +1,11 @@
 package ru.dariayo;
 
+import java.sql.SQLException;
+
 public abstract class Command {
     private Object argument;
 
-    public abstract void execute();
+    public abstract void execute() throws SQLException;
 
     public Command() {
     }

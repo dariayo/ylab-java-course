@@ -1,13 +1,12 @@
 package ru.dariayo.commands;
 
-import java.util.Scanner;
+import java.sql.SQLException;
 
 import ru.dariayo.Command;
 import ru.dariayo.model.Car;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;
-import ru.dariayo.userInterface.UserInterface;
 
 public class AddCar extends Command {
     private final CarCollection carCollection;
@@ -21,7 +20,7 @@ public class AddCar extends Command {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws SQLException {
         System.out.println(personCollection.getPerson().getRole());
         if (personCollection.getPerson().getRole().equals("admin")
                 || personCollection.getPerson().getRole().equals("manager")) {
