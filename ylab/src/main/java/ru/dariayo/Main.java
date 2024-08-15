@@ -22,13 +22,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException, SQLException {
         try (Scanner scanner = new Scanner(System.in)) {
-            Connection connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-            Database database = DatabaseFactory.getInstance()
-                    .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-            Liquibase liquibase = new Liquibase("db/changelog/changelog.xml", new ClassLoaderResourceAccessor(),
-                    database);
-            liquibase.update();
-            System.out.println("Migration is completed successfully");
+            LiquibaseManager liquibaseManager = new LiquibaseManager();
+            liquibaseManager.createBase();
             CollectionFactory factory = new DefaultCollectionFactory();
 
             CommandManager commandManager = factory.createCommandManager();
