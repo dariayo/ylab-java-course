@@ -1,7 +1,5 @@
 package ru.dariayo.commands;
 
-import java.util.Scanner;
-
 import ru.dariayo.Command;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;

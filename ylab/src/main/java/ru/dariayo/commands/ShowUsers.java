@@ -1,7 +1,6 @@
 package ru.dariayo.commands;
 
 import ru.dariayo.Command;
-import ru.dariayo.model.Person;
 import ru.dariayo.repositories.PersonCollection;
 
 public class ShowUsers extends Command {

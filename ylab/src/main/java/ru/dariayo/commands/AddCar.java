@@ -1,14 +1,12 @@
 package ru.dariayo.commands;
 
 import java.sql.SQLException;
-import java.util.Scanner;
 
 import ru.dariayo.Command;
 import ru.dariayo.model.Car;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;
-import ru.dariayo.userInterface.UserInterface;
 
 public class AddCar extends Command {
     private final CarCollection carCollection;

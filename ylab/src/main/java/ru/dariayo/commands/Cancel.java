@@ -1,11 +1,8 @@
 package ru.dariayo.commands;
 
-import java.util.Scanner;
-
 import ru.dariayo.Command;
 import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.userInterface.ConsoleUserInterface;
-import ru.dariayo.userInterface.UserInterface;
 
 public class Cancel extends Command {
     private final OrderCollection orderCollection;

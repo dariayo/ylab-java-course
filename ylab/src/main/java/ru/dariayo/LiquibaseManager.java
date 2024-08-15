@@ -16,7 +16,7 @@ import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 public class LiquibaseManager {
-    LiquibaseManager() {
+    public LiquibaseManager() {
     }
 
     public void createBase() {
