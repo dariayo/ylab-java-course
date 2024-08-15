@@ -1,26 +1,16 @@
 package ru.dariayo;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import ru.dariayo.factory.CollectionFactory;
 import ru.dariayo.factory.DefaultCollectionFactory;
 
 public class Main {
-    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String USER_NAME = "postgres";
-    private static final String PASSWORD = "123";
 
-    public static void main(String[] args) throws IOException, SQLException {
+    public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             LiquibaseManager liquibaseManager = new LiquibaseManager();
             liquibaseManager.createBase();
@@ -37,7 +27,7 @@ public class Main {
 
             } while (!input.equals("exit"));
             // auditLogRepository.exportLogsToFile("audit_log.txt");
-        } catch (SQLException | LiquibaseException e) {
+        } catch (SQLException e) {
             System.out.println("SQL Exception in migration " + e.getMessage());
         }
     }

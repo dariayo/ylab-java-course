@@ -16,13 +16,18 @@ public class LiquibaseManager {
     private static final String USER_NAME = "postgres";
     private static final String PASSWORD = "123";
 
-    public void createBase() throws SQLException, LiquibaseException {
-        Connection connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-        Database database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-        Liquibase liquibase = new Liquibase("db/changelog/changelog.xml", new ClassLoaderResourceAccessor(),
-                database);
-        liquibase.update();
-        System.out.println("Migration is completed successfully");
+    public void createBase() {
+        Connection connection;
+        try {
+            connection = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            Database database = DatabaseFactory.getInstance()
+                    .findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            Liquibase liquibase = new Liquibase("db/changelog/changelog.xml", new ClassLoaderResourceAccessor(),
+                    database);
+            liquibase.update();
+            System.out.println("Migration is completed successfully");
+        } catch (SQLException | LiquibaseException e) {
+            System.out.println("SQL Exception in migration " + e.getMessage());
+        }
     }
 }

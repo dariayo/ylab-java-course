@@ -67,36 +67,4 @@ public class PersonCollection {
         dbManager.infoUsers();
     }
 
-    /**
-     * sort users by name, contacts and count of orders
-     * 
-     * @param param
-     */
-    // public void printSortedUsers(String param) {
-    // TreeSet<Person> sortedCollection;
-
-    // switch (param) {
-    // case "name":
-    // sortedCollection = new TreeSet<>(new PersonNameComparator());
-    // break;
-    // case "contacts":
-    // sortedCollection = new TreeSet<>(new PersonContactsComparator());
-    // break;
-    // case "orders":
-    // sortedCollection = new TreeSet<>(new PersonOrdersComparator());
-    // break;
-    // default:
-    // System.out.println("Invalid sort parameter.");
-    // return;
-    // }
-
-    // sortedCollection.addAll(personCollection);
-
-    // for (Person person : sortedCollection) {
-    // System.out.println(person.getName() + ", " + person.getRole() + ", " +
-    // person.getContacts() + ", "
-    // + person.getCountOrders());
-    // }
-    // }
-
 }
