@@ -1,5 +1,8 @@
 package ru.dariayo.repositories;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -12,16 +15,20 @@ import ru.dariayo.model.Order;
 import ru.dariayo.model.Person;
 
 public class OrderCollection {
+    private static final String TABLE_ORDER = "cs_schema.orders";
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
     private AuditLogRepository auditLogRepository;
-    private DBManager dbManager;
+    private Connection connection;
+
+    private static final String SQL_ADD_ORDER = String.format("INSERT INTO %s (%s,%s,%s) VALUES (?, ?, ?)",
+            TABLE_ORDER, "nameBuyer", "status", "mark");
 
     public OrderCollection() {
     }
 
     public OrderCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
         this.auditLogRepository = auditLogRepository;
-        this.dbManager = dbManager;
+        this.connection = dbManager.connectDB();
     }
 
     /**
@@ -35,7 +42,12 @@ public class OrderCollection {
      */
     public void makeOrder(Person person, String mark, String model, CarCollection carCollection) throws SQLException {
         Order order = new Order(person.getName(), "Placed", mark);
-        dbManager.addOrder(order);
+        PreparedStatement statement = connection.prepareStatement(SQL_ADD_ORDER);
+        statement.setString(1, order.getNameBuyer());
+        statement.setString(2, order.getStatus());
+        statement.setString(3, order.getCar());
+        statement.executeUpdate();
+        statement.close();
         logger.log(Level.INFO, "Create order: " + order.getId());
         auditLogRepository.logAction("System", "Create order",
                 "Number: " + order.getId() + " By user: " + order.getNameBuyer());
@@ -48,14 +60,33 @@ public class OrderCollection {
      * @param status
      */
     public void changeStatus(int id, String status) {
-        dbManager.changeStatusOrder(id, status);
+        try (PreparedStatement statement = connection.prepareStatement(
+                "UPDATE cs_schema.orders SET status = ?" +
+                        " WHERE id = ? ")) {
+            statement.setString(1, status);
+            statement.setInt(2, id);
+            statement.execute();
+        } catch (Exception e) {
+        }
     }
 
     /**
      * get order by id
      */
     public void getOrder(int id) {
-        dbManager.getOrderById(id);
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.orders WHERE id = ? ")) {
+            statement.setInt(1, id);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    System.out.println("Покупатель: " + resultSet.getString("nameBuyer") + " Статус заказа: "
+                            + resultSet.getString("status")
+                            + " Автомобиль: " + resultSet.getString("mark"));
+                }
+            }
+        } catch (Exception e) {
+        }
     }
 
     /**
@@ -68,7 +99,22 @@ public class OrderCollection {
         System.out.println("Введите параметр поиска");
         Scanner scanner = new Scanner(System.in);
         String arg = scanner.nextLine();
-        orders.add(dbManager.searchOrderByParam(arg, param));
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT FROM cs_schema.orders WHERE ? = ? ")) {
+            statement.setString(1, param);
+            statement.setString(2, arg);
+            statement.execute();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Order order = new Order(
+                            resultSet.getString("nameBuyer"),
+                            resultSet.getString("status"),
+                            resultSet.getString("mark"));
+                    orders.add(order);
+                }
+            }
+        } catch (Exception e) {
+        }
         for (Order order : orders) {
             System.out.println(order.getNameBuyer() + ", " + order.getCar() + ", " + order.getStatus());
         }
