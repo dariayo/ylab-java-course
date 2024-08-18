@@ -26,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -41,14 +41,14 @@ public class RegisterServlet extends HttpServlet {
                     role == null || role.isEmpty() ||
                     contacts == null || contacts.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                objectMapper.writeValue(resp.getWriter(), new ApiResponse("All fields are required."));
+                objectMapper.writeValue(resp.getWriter(), "All fields are required.");
                 return;
             }
 
             if ((role.equals("admin") || role.equals("manager")) &&
                     !password.equals("123")) {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                objectMapper.writeValue(resp.getWriter(), new ApiResponse("Invalid password for the given role."));
+                objectMapper.writeValue(resp.getWriter(), "Invalid password for the given role.");
                 return;
             }
 
@@ -56,15 +56,15 @@ public class RegisterServlet extends HttpServlet {
             personCollection.addPerson(person);
 
             resp.setStatus(HttpServletResponse.SC_OK);
-            objectMapper.writeValue(resp.getWriter(), new ApiResponse("User registered successfully."));
+            objectMapper.writeValue(resp.getWriter(), "User registered successfully.");
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            objectMapper.writeValue(resp.getWriter(), new ApiResponse("An error occurred: " + e.getMessage()));
+            objectMapper.writeValue(resp.getWriter(), "An error occurred: " + e.getMessage());
         }
     }
 
-    private static class ApiResponse {
-        public ApiResponse(String message) {
-        }
-    }
+    // private static class ApiResponse {
+    // public ApiResponse(String message) {
+    // }
+    // }
 }
