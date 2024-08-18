@@ -1,6 +1,5 @@
 package ru.dariayo.servlets;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.dariayo.repositories.CarCollection;
 
@@ -19,7 +18,6 @@ public class ShowCarsServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ShowCarsServlet() {
-        // Конструктор без параметров для соответствия спецификации сервлетов
         this.carCollection = new CarCollection();
     }
 
@@ -33,8 +31,8 @@ public class ShowCarsServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            List<?> cars = carCollection.getCars(); // Получаем список машин
-            
+            List<?> cars = carCollection.getCars();
+
             if (cars.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
                 objectMapper.writeValue(resp.getWriter(), new ApiResponse("No cars available."));
@@ -48,16 +46,8 @@ public class ShowCarsServlet extends HttpServlet {
         }
     }
 
-    // Класс для форматирования JSON-ответов
     private static class ApiResponse {
-        private final String message;
-
         public ApiResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

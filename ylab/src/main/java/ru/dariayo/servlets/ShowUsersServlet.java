@@ -18,8 +18,8 @@ public class ShowUsersServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ShowUsersServlet() {
-        // Конструктор без параметров для соответствия спецификации сервлетов
-        this.personCollection = new PersonCollection(); // Замените это на реальную инициализацию
+
+        this.personCollection = new PersonCollection();
     }
 
     public ShowUsersServlet(PersonCollection personCollection) {
@@ -32,7 +32,7 @@ public class ShowUsersServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            List<Person> users = personCollection.getUsers(); // Метод для получения списка пользователей
+            List<Person> users = personCollection.getUsers();
 
             if (users.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
@@ -47,16 +47,8 @@ public class ShowUsersServlet extends HttpServlet {
         }
     }
 
-    // Класс для форматирования JSON-ответов
     private static class ApiResponse {
-        private final String message;
-
         public ApiResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

@@ -19,8 +19,7 @@ public class ShowLogsServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ShowLogsServlet() {
-        // Конструктор без параметров для соответствия спецификации сервлетов
-        this.auditLogRepository = new AuditLogRepository(); // Замените это на реальную инициализацию
+        this.auditLogRepository = new AuditLogRepository();
     }
 
     public ShowLogsServlet(AuditLogRepository auditLogRepository) {
@@ -33,7 +32,7 @@ public class ShowLogsServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            String filterParam = req.getParameter("filter"); // Параметр фильтрации
+            String filterParam = req.getParameter("filter");
 
             if (filterParam == null || filterParam.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -41,7 +40,6 @@ public class ShowLogsServlet extends HttpServlet {
                 return;
             }
 
-            // Фильтрация журналов
             List<AuditLog> filteredLogs = auditLogRepository.filterLogs(null, LocalDateTime.now(), null, filterParam);
 
             if (filteredLogs.isEmpty()) {
@@ -57,16 +55,8 @@ public class ShowLogsServlet extends HttpServlet {
         }
     }
 
-    // Класс для форматирования JSON-ответов
     private static class ApiResponse {
-        private final String message;
-
         public ApiResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

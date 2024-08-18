@@ -24,7 +24,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Чтение входящих данных (JSON)
         Map<String, String> requestData = objectMapper.readValue(req.getInputStream(), Map.class);
         String username = requestData.get("username");
         String password = requestData.get("password");
@@ -38,7 +37,6 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // Проверка пользователя
         boolean isAuthenticated = personCollection.checkUser(username, password);
 
         if (isAuthenticated) {
@@ -49,7 +47,6 @@ public class LoginServlet extends HttpServlet {
             responseData.put("message", "Invalid username or password.");
         }
 
-        // Отправка ответа
         objectMapper.writeValue(resp.getWriter(), responseData);
     }
 }

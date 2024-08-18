@@ -19,9 +19,8 @@ public class UpdateCarServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public UpdateCarServlet() {
-        // Конструктор без параметров для соответствия спецификации сервлетов
-        this.carCollection = new CarCollection(); // Замените это на реальную инициализацию
-        this.personCollection = new PersonCollection(); // Замените это на реальную инициализацию
+        this.carCollection = new CarCollection();
+        this.personCollection = new PersonCollection();
     }
 
     public UpdateCarServlet(CarCollection carCollection, PersonCollection personCollection) {
@@ -35,12 +34,11 @@ public class UpdateCarServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            // Получаем данные из запроса
+
             String mark = req.getParameter("mark");
             String model = req.getParameter("model");
             Person currentPerson = personCollection.getPerson();
 
-            // Проверяем права пользователя
             if (currentPerson == null
                     || !(currentPerson.getRole().equals("admin") || currentPerson.getRole().equals("manager"))) {
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -49,14 +47,12 @@ public class UpdateCarServlet extends HttpServlet {
                 return;
             }
 
-            // Проверяем корректность входных данных
             if (mark == null || mark.isEmpty() || model == null || model.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 objectMapper.writeValue(resp.getWriter(), new ApiResponse("Mark and model are required."));
                 return;
             }
 
-            // Выполняем обновление
             carCollection.updateCar(mark, model);
 
             resp.setStatus(HttpServletResponse.SC_OK);
@@ -67,16 +63,8 @@ public class UpdateCarServlet extends HttpServlet {
         }
     }
 
-    // Класс для форматирования JSON-ответов
     private static class ApiResponse {
-        private final String message;
-
         public ApiResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

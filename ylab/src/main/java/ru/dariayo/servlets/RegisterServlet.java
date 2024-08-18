@@ -17,8 +17,8 @@ public class RegisterServlet extends HttpServlet {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RegisterServlet() {
-        // Конструктор без параметров для соответствия спецификации сервлетов
-        this.personCollection = new PersonCollection(); // Замените это на реальную инициализацию
+
+        this.personCollection = new PersonCollection();
     }
 
     public RegisterServlet(PersonCollection personCollection) {
@@ -31,13 +31,11 @@ public class RegisterServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
-            // Получаем данные из запроса
             String username = req.getParameter("username");
             String password = req.getParameter("password");
             String role = req.getParameter("role");
             String contacts = req.getParameter("contacts");
 
-            // Проверяем, что все параметры присутствуют
             if (username == null || username.isEmpty() ||
                     password == null || password.isEmpty() ||
                     role == null || role.isEmpty() ||
@@ -47,15 +45,13 @@ public class RegisterServlet extends HttpServlet {
                 return;
             }
 
-            // Проверяем роль и пароль для admin или manager
             if ((role.equals("admin") || role.equals("manager")) &&
-                    !password.equals("123")) { // Пример проверки пароля
+                    !password.equals("123")) {
                 resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 objectMapper.writeValue(resp.getWriter(), new ApiResponse("Invalid password for the given role."));
                 return;
             }
 
-            // Создаем нового пользователя и добавляем его в коллекцию
             Person person = new Person(username, password, role, contacts);
             personCollection.addPerson(person);
 
@@ -67,16 +63,8 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    // Класс для форматирования JSON-ответов
     private static class ApiResponse {
-        private final String message;
-
         public ApiResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() {
-            return message;
         }
     }
 }

@@ -27,7 +27,7 @@ public class RemoveCarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Проверка роли пользователя
+
         String role = personCollection.getPerson().getRole();
         if (!"admin".equals(role) && !"manager".equals(role)) {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
@@ -37,12 +37,10 @@ public class RemoveCarServlet extends HttpServlet {
             return;
         }
 
-        // Чтение входящих данных (JSON)
         Map<String, String> requestData = objectMapper.readValue(req.getInputStream(), Map.class);
         String mark = requestData.get("mark");
         String model = requestData.get("model");
 
-        // Проверка наличия необходимых параметров
         if (mark == null || model == null) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             Map<String, String> responseData = new HashMap<>();
@@ -51,7 +49,6 @@ public class RemoveCarServlet extends HttpServlet {
             return;
         }
 
-        // Удаление автомобиля
         boolean carRemoved = carCollection.removeCar(mark, model);
 
         Map<String, String> responseData = new HashMap<>();
@@ -63,7 +60,6 @@ public class RemoveCarServlet extends HttpServlet {
             responseData.put("message", "Автомобиль не найден.");
         }
 
-        // Отправка ответа
         objectMapper.writeValue(resp.getWriter(), responseData);
     }
 }

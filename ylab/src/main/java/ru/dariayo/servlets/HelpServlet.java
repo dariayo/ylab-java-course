@@ -18,7 +18,7 @@ public class HelpServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Создание списка команд и их описаний
+
         Map<String, String> commands = new HashMap<>();
         commands.put("add_car", "добавить авто");
         commands.put("buy", "оформить заказ на покупку авто");
@@ -36,9 +36,8 @@ public class HelpServlet extends HttpServlet {
         commands.put("show_users", "список всех зарегистрированных пользователей");
         commands.put("update_car", "обновить данные об авто");
 
-        // Установка статуса успешного выполнения
         resp.setStatus(HttpServletResponse.SC_OK);
-        // Отправка JSON-ответа с командами
+
         objectMapper.writeValue(resp.getWriter(), commands);
     }
 }
