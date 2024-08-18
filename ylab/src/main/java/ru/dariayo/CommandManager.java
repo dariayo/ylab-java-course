@@ -15,7 +15,7 @@ public class CommandManager {
             OrderCollection orderCollection, AuditLogRepository auditLogRepository,
             ConsoleUserInterface userInterface) {
         commands = new HashMap<>();
-        initializeCommand(new Register(personCollection, userInterface));
+        // initializeCommand(new Register(personCollection, userInterface));
         initializeCommand(new Login(personCollection, userInterface));
         initializeCommand(new Show(carCollection));
         initializeCommand(new AddCar(carCollection, personCollection, userInterface));
