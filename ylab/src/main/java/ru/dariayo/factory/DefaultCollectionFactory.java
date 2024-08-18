@@ -2,13 +2,11 @@ package ru.dariayo.factory;
 
 import java.sql.SQLException;
 
-import ru.dariayo.CommandManager;
 import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.OrderCollection;
 import ru.dariayo.repositories.PersonCollection;
-import ru.dariayo.userInterface.ConsoleUserInterface;
 
 public class DefaultCollectionFactory implements CollectionFactory {
     private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
@@ -43,16 +41,5 @@ public class DefaultCollectionFactory implements CollectionFactory {
     @Override
     public AuditLogRepository createAuditLogRepository() {
         return new AuditLogRepository();
-    }
-
-    @Override
-    public CommandManager createCommandManager() throws SQLException {
-        return new CommandManager(createPersonCollection(), createCarCollection(), createOrderCollection(),
-                createAuditLogRepository(), createUserInterface());
-    }
-
-    @Override
-    public ConsoleUserInterface createUserInterface() {
-        return new ConsoleUserInterface();
     }
 }

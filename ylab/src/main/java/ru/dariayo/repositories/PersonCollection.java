@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import ru.dariayo.db.DBManager;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Person;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,7 +75,7 @@ public class PersonCollection {
      * @param username
      * @param password
      */
-    public void checkUser(String username, String password) {
+    public boolean checkUser(String username, String password) {
 
         try (PreparedStatement statement = connection.prepareStatement(
                 SQL_FIND_USER)) {
@@ -89,12 +92,14 @@ public class PersonCollection {
                     logger.log(Level.INFO, "Пользователь авторизирован: " + person.getName());
                     auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
                     System.out.println("Добро пожаловать, " + person.getName());
+                    return true;
 
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            return false;
         }
+        return false;
     }
 
     public Person getPerson() {
@@ -108,16 +113,25 @@ public class PersonCollection {
     /**
      * print information about users
      */
-    public void info() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cs_schema.users")) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    System.out.println("Имя: " + resultSet.getString("username") + " роль: "
-                            + resultSet.getString("role"));
-                }
+    public List<Person> getUsers() {
+        List<Person> users = new ArrayList<>();
+        String query = "SELECT * FROM cs_schema.users";
+
+        try (PreparedStatement statement = connection.prepareStatement(query);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Person person = new Person(
+                        resultSet.getString("username"),
+                        resultSet.getString("role"),
+                        resultSet.getString("contacts"),
+                        resultSet.getString("password"));
+                users.add(person);
             }
         } catch (Exception e) {
+            e.printStackTrace(); // Логирование ошибки для отладки
         }
+        return users;
     }
 
 }

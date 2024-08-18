@@ -8,13 +8,11 @@ import org.mapstruct.factory.Mappers;
 import ru.dariayo.dto.CarDTO;
 import ru.dariayo.model.Car;
 
-import java.util.List;
-
 @Mapper(componentModel = MappingConstants.ComponentModel.DEFAULT, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CarMapper {
     CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
 
-    CarDTO toCarDTO(Car car);
+    CarDTO carToCarDTO(Car car);
 
-    List<CarDTO> toCarDTOList(List<Car> cars);
+    Car carDTOToCar(CarDTO carDTO);
 }
