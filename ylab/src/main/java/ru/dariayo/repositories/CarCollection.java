@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -32,18 +34,27 @@ public class CarCollection {
     /**
      * information about all cars
      */
-    public void showCars() {
-        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM cs_schema.cars")) {
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    System.out.println("Марка: " + resultSet.getString("mark") + " модель: "
-                            + resultSet.getString("model") + " год выпуска: "
-                            + resultSet.getInt("year") + " цена: " + resultSet.getInt("price") + " состояние: "
-                            + resultSet.getString("condition"));
-                }
+    public List<Car> getCars() {
+        List<Car> cars = new ArrayList<>();
+        String query = "SELECT * FROM cs_schema.cars";
+        
+        try (PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+            
+            while (resultSet.next()) {
+                Car car = new Car(
+                    resultSet.getString("mark"),
+                    resultSet.getString("model"),
+                    resultSet.getInt("year"),
+                    resultSet.getInt("price"),
+                    resultSet.getString("condition")
+                );
+                cars.add(car);
             }
         } catch (Exception e) {
+            e.printStackTrace(); // Логирование ошибки для отладки
         }
+        return cars;
     }
 
     /**
@@ -71,19 +82,20 @@ public class CarCollection {
      * @param mark
      * @param model
      */
-    public void removeCar(String mark, String model) {
+    public boolean removeCar(String mark, String model) {
         try (PreparedStatement statement = connection
                 .prepareStatement("DELETE FROM cs_schema.cars WHERE mark = ? AND model = ?")) {
             statement.setString(1, mark);
             statement.setString(2, model);
             statement.execute();
         } catch (Exception e) {
-            e.printStackTrace();
+           return false;
         }
         logger.log(Level.INFO, "Remove car: " + mark);
         auditLogRepository.logAction("System", "Remove car",
                 "Mark: " + mark + " Model: " + model);
         System.out.println("Автомобиль удален");
+        return true;
     }
 
     /**
