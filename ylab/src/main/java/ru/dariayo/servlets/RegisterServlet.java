@@ -62,9 +62,4 @@ public class RegisterServlet extends HttpServlet {
             objectMapper.writeValue(resp.getWriter(), "An error occurred: " + e.getMessage());
         }
     }
-
-    // private static class ApiResponse {
-    // public ApiResponse(String message) {
-    // }
-    // }
 }
