@@ -21,23 +21,19 @@ public class SearchCarServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
 
-            String param = req.getParameter("param");
+        String param = req.getParameter("param");
 
-            if (param == null || param.isEmpty()) {
-                resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                objectMapper.writeValue(resp.getWriter(), "Param are required.");
-                return;
-            }
-
-            carCollection.searchCar(param);
-
-            resp.setStatus(HttpServletResponse.SC_OK);
-            objectMapper.writeValue(resp.getWriter(), "Car find.");
-        } catch (Exception e) {
-            resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            objectMapper.writeValue(resp.getWriter(), "An error occurred: " + e.getMessage());
+        if (param == null || param.isEmpty()) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            objectMapper.writeValue(resp.getWriter(), "Param are required.");
+            return;
         }
+
+        carCollection.searchCar(param);
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+        objectMapper.writeValue(resp.getWriter(), "Car find.");
+
     }
 }
