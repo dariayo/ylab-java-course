@@ -15,10 +15,15 @@ import java.util.Map;
 public class HelpServlet extends HttpServlet {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private Map<String, String> commands;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void init() throws ServletException {
+        super.init();
+        commands = initializeCommands();
+    }
 
+    private Map<String, String> initializeCommands() {
         Map<String, String> commands = new HashMap<>();
         commands.put("add_car", "добавить авто");
         commands.put("buy", "оформить заказ на покупку авто");
@@ -35,9 +40,12 @@ public class HelpServlet extends HttpServlet {
         commands.put("show_logs", "вывести логи по действиям пользователей");
         commands.put("show_users", "список всех зарегистрированных пользователей");
         commands.put("update_car", "обновить данные об авто");
+        return commands;
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(HttpServletResponse.SC_OK);
-
         objectMapper.writeValue(resp.getWriter(), commands);
     }
 }
