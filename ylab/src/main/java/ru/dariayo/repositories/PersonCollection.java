@@ -1,137 +1,78 @@
 package ru.dariayo.repositories;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import ru.dariayo.db.DBManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Person;
 
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Repository
 public class PersonCollection {
+
     private static final String TABLE_USER = "cs_schema.users";
-    private static final String CONTACTS = "contacts";
-    private static final String PASSWORD = "password";
     private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
     private static final String ROLE = "role";
-    private Person person;
+    private static final String CONTACTS = "contacts";
+
     private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
-    private AuditLogRepository auditLogRepository;
-    private Connection connection;
 
-    private static final String SQL_ADD_USER = String.format("INSERT INTO %s (%s,%s,%s,%s) VALUES (?, ?, ?, ?)",
-            TABLE_USER, USERNAME, PASSWORD, ROLE, CONTACTS);
-    private static final String SQL_FIND_USER = String.format("SELECT * FROM %s WHERE %s = ?", TABLE_USER, USERNAME);
+    private final JdbcTemplate jdbcTemplate;
+    private final AuditLogRepository auditLogRepository;
 
-    public PersonCollection() {
-    }
-
-    public PersonCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
+    @Autowired
+    public PersonCollection(JdbcTemplate jdbcTemplate, AuditLogRepository auditLogRepository) {
+        this.jdbcTemplate = jdbcTemplate;
         this.auditLogRepository = auditLogRepository;
-        this.connection = dbManager.connectDB();
     }
 
-    /**
-     * add person to treeset
-     * 
-     * @param person
-     * @throws SQLException
-     */
-    public void addPerson(Person person) throws SQLException {
-        if (!userExist(person)) {
-            PreparedStatement statement = connection.prepareStatement(SQL_ADD_USER);
-            statement.setString(1, person.getName());
-            statement.setString(2, person.getPassword());
-            statement.setString(3, person.getRole());
-            statement.setString(4, person.getContacts());
-            statement.executeUpdate();
-            statement.close();
+    public void addPerson(Person person) {
+        if (!userExists(person)) {
+            String sql = String.format("INSERT INTO %s (%s,%s,%s,%s) VALUES (?, ?, ?, ?)", TABLE_USER, USERNAME,
+                    PASSWORD, ROLE, CONTACTS);
+            jdbcTemplate.update(sql, person.getName(), person.getPassword(), person.getRole(), person.getContacts());
+            logger.log(Level.INFO, "Added person: " + person.getName());
+            auditLogRepository.logAction("System", "Add Person", "Added person: " + person.getName());
         }
-        setPerson(person);
-        logger.log(Level.INFO, "Added person: " + person.getName());
-        auditLogRepository.logAction("System", "Add Person", "Added person: " + person.getName());
     }
 
-    public boolean userExist(Person person) throws SQLException {
+    public boolean userExists(Person person) {
         String sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ?", TABLE_USER, CONTACTS);
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, person.getContacts());
-        ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        int count = resultSet.getInt(1);
-        statement.close();
-        return count != 0;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, person.getContacts());
+        return count != null && count > 0;
     }
 
-    /**
-     * check login and password when user loginz
-     * 
-     * @param username
-     * @param password
-     */
     public boolean checkUser(String username, String password) {
+        String sql = String.format("SELECT * FROM %s WHERE %s = ?", TABLE_USER, USERNAME);
+        List<Person> users = jdbcTemplate.query(sql, this::mapRowToPerson, username);
 
-        try (PreparedStatement statement = connection.prepareStatement(
-                SQL_FIND_USER)) {
-            statement.setString(1, username);
-            // statement.setString(2, password);
-            statement.execute();
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Person person = new Person(resultSet.getString("username"), resultSet.getString("password"),
-                        resultSet.getString("role"), resultSet.getString("contacts"));
-
-                if (person != null) {
-                    setPerson(person);
-                    logger.log(Level.INFO, "Пользователь авторизирован: " + person.getName());
-                    auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
-                    System.out.println("Добро пожаловать, " + person.getName());
-                    return true;
-
-                }
+        if (!users.isEmpty()) {
+            Person person = users.get(0);
+            if (person.getPassword().equals(password)) {
+                logger.log(Level.INFO, "User logged in: " + person.getName());
+                auditLogRepository.logAction("System", "Person login", "Login person: " + person.getName());
+                return true;
             }
-        } catch (Exception e) {
-            return false;
         }
         return false;
     }
 
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-
-    /**
-     * print information about users
-     */
     public List<Person> getUsers() {
-        List<Person> users = new ArrayList<>();
-        String query = "SELECT * FROM cs_schema.users";
-
-        try (PreparedStatement statement = connection.prepareStatement(query);
-                ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                Person person = new Person(
-                        resultSet.getString("username"),
-                        resultSet.getString("role"),
-                        resultSet.getString("contacts"),
-                        resultSet.getString("password"));
-                users.add(person);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Логирование ошибки для отладки
-        }
-        return users;
+        String sql = "SELECT * FROM cs_schema.users";
+        return jdbcTemplate.query(sql, this::mapRowToPerson);
     }
 
+    private Person mapRowToPerson(ResultSet rs, int rowNum) throws SQLException {
+        return new Person(
+                rs.getString(USERNAME),
+                rs.getString(PASSWORD),
+                rs.getString(ROLE),
+                rs.getString(CONTACTS));
+    }
 }

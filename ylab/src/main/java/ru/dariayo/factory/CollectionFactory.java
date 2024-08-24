@@ -7,9 +7,9 @@ import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.repositories.*;
 
 public interface CollectionFactory {
-    PersonCollection createPersonCollection() throws SQLException;
-    CarCollection createCarCollection() throws SQLException;
-    OrderCollection createOrderCollection() throws SQLException;
-    AuditLogRepository createAuditLogRepository();
-    DBManager createDbManager() throws SQLException;
+    // PersonCollection createPersonCollection() throws SQLException;
+    // CarCollection createCarCollection() throws SQLException;
+    // OrderCollection createOrderCollection() throws SQLException;
+    // AuditLogRepository createAuditLogRepository();
+    // DBManager createDbManager() throws SQLException;
 }

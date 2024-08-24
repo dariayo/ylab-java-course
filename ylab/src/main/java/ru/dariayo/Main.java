@@ -1,23 +1,28 @@
 package ru.dariayo;
 
-import java.util.Scanner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            LiquibaseManager liquibaseManager = new LiquibaseManager();
-            liquibaseManager.createBase();
+        SpringApplication.run(Main.class, args);
 
-            System.out.println("Введите команду login для входа или register для регистрации, help - все команды");
-            String input;
-            do {
-                if (!scanner.hasNextLine())
-                    return;
-                input = scanner.nextLine();
+        // try (Scanner scanner = new Scanner(System.in)) {
+        // LiquibaseManager liquibaseManager = new LiquibaseManager();
+        // liquibaseManager.createBase();
 
-            } while (!input.equals("exit"));
-            // auditLogRepository.exportLogsToFile("audit_log.txt");
-        }
+        // System.out.println("Введите команду login для входа или register для
+        // регистрации, help - все команды");
+        // String input;
+        // do {
+        // if (!scanner.hasNextLine())
+        // return;
+        // input = scanner.nextLine();
+
+        // } while (!input.equals("exit"));
+        // // auditLogRepository.exportLogsToFile("audit_log.txt");
+        // }
     }
 }

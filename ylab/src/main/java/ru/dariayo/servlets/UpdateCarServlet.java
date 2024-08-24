@@ -1,6 +1,8 @@
 package ru.dariayo.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import ru.dariayo.repositories.CarCollection;
 import ru.dariayo.repositories.PersonCollection;
 import ru.dariayo.model.Person;
@@ -10,22 +12,22 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
+@Controller
 @WebServlet("/api/updateCar")
 public class UpdateCarServlet extends HttpServlet {
+
     private final CarCollection carCollection;
-    private final PersonCollection personCollection;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final PersonCollection personRepository;
+    private final ObjectMapper objectMapper;
 
-    public UpdateCarServlet() {
-        this.carCollection = new CarCollection();
-        this.personCollection = new PersonCollection();
-    }
-
-    public UpdateCarServlet(CarCollection carCollection, PersonCollection personCollection) {
+    @Autowired
+    public UpdateCarServlet(CarCollection carCollection, PersonCollection personRepository, ObjectMapper objectMapper) {
         this.carCollection = carCollection;
-        this.personCollection = personCollection;
+        this.personRepository = personRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -34,26 +36,31 @@ public class UpdateCarServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try {
+            String oldMark = req.getParameter("oldMark");
+            String oldModel = req.getParameter("oldModel");
+            String newMark = req.getParameter("newMark");
+            String newModel = req.getParameter("newModel");
+            int year = Integer.parseInt(req.getParameter("year"));
+            int price = Integer.parseInt(req.getParameter("price"));
+            String condition = req.getParameter("condition");
 
-            String mark = req.getParameter("mark");
-            String model = req.getParameter("model");
             Person currentPerson = personCollection.getPerson();
 
-            if (currentPerson == null
-                    || !(currentPerson.getRole().equals("admin") || currentPerson.getRole().equals("manager"))) {
+            if (currentPerson == null ||
+                    !(currentPerson.getRole().equals("admin") || currentPerson.getRole().equals("manager"))) {
                 resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 objectMapper.writeValue(resp.getWriter(),
                         new ApiResponse("You do not have permission to update the car."));
                 return;
             }
 
-            if (mark == null || mark.isEmpty() || model == null || model.isEmpty()) {
+            if (oldMark == null || oldMark.isEmpty() || oldModel == null || oldModel.isEmpty()) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                objectMapper.writeValue(resp.getWriter(), new ApiResponse("Mark and model are required."));
+                objectMapper.writeValue(resp.getWriter(), new ApiResponse("Old mark and model are required."));
                 return;
             }
 
-            carCollection.updateCar(mark, model);
+            carCollection.updateCar(oldMark, oldModel, newMark, newModel, year, price, condition);
 
             resp.setStatus(HttpServletResponse.SC_OK);
             objectMapper.writeValue(resp.getWriter(), new ApiResponse("Car updated successfully."));
@@ -64,7 +71,14 @@ public class UpdateCarServlet extends HttpServlet {
     }
 
     private static class ApiResponse {
+        private final String message;
+
         public ApiResponse(String message) {
+            this.message = message;
+        }
+
+        public String getMessage() {
+            return message;
         }
     }
 }
