@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.dariayo.repositories.OrderCollection;
+import ru.dariayo.validation.OrderValidator;
 
 @WebServlet("/api/cancelOrder")
 public class CancelOrderServlet extends HttpServlet {
@@ -24,12 +25,11 @@ public class CancelOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-
             String idParam = req.getParameter("orderId");
 
-            if (idParam == null || idParam.isEmpty()) {
+            if (!OrderValidator.isValidOrderId(idParam)) {
                 resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                objectMapper.writeValue(resp.getWriter(), "Order ID is required.");
+                objectMapper.writeValue(resp.getWriter(), "Invalid or missing order ID.");
                 return;
             }
 
@@ -39,9 +39,6 @@ public class CancelOrderServlet extends HttpServlet {
 
             resp.setStatus(HttpServletResponse.SC_OK);
             objectMapper.writeValue(resp.getWriter(), "Order cancelled successfully.");
-        } catch (NumberFormatException e) {
-            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            objectMapper.writeValue(resp.getWriter(), "Invalid order ID.");
         } catch (Exception e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             objectMapper.writeValue(resp.getWriter(), "An error occurred: " + e.getMessage());
