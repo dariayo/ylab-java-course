@@ -13,5 +13,3 @@
 Чтобы зарегистрироваться как админ или менеджер, то в команде register нужно выбрать роль admin(manager) и ввести пароль "123"
 
 ## 2. [ДЗ №2](https://github.com/dariayo/ylab-java-course/pull/2)
-
-## 3. [ДЗ №3](https://github.com/dariayo/ylab-java-course/pull/3)
