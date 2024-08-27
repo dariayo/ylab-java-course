@@ -25,13 +25,13 @@ public class OrderController {
         return ResponseEntity.ok("Order placed successfully");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/changeStatus/{id}")
     public ResponseEntity<String> changeStatus(@PathVariable int id, @RequestParam String status) {
         orderRepository.changeStatus(id, status);
         return ResponseEntity.ok("Order status updated successfully");
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable int id) {
         Order order = orderRepository.getOrder(id);
         return ResponseEntity.ok(order);

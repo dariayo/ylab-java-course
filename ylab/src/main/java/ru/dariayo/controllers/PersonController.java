@@ -19,7 +19,7 @@ public class PersonController {
         this.personRepository = personRepository;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<String> addPerson(@RequestBody Person person) {
         personRepository.addPerson(person);
         return ResponseEntity.ok("Person added successfully");

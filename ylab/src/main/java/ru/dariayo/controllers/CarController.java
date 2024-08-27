@@ -30,7 +30,7 @@ public class CarController {
         return ResponseEntity.ok("Car added successfully");
     }
 
-    @PutMapping("/{mark}/{model}")
+    @PutMapping("/update/{mark}/{model}")
     public ResponseEntity<String> updateCar(
             @PathVariable String mark,
             @PathVariable String model,
@@ -39,7 +39,7 @@ public class CarController {
         return ResponseEntity.ok("Car updated successfully");
     }
 
-    @DeleteMapping("/{mark}/{model}")
+    @DeleteMapping("/remove/{mark}/{model}")
     public ResponseEntity<String> removeCar(@PathVariable String mark, @PathVariable String model) {
         boolean result = carRepository.removeCar(mark, model);
         if (result) {
