@@ -32,6 +32,12 @@ public class PersonCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    /**
+     * add person to treeset
+     * 
+     * @param person
+     * @throws SQLException
+     */
     public void addPerson(Person person) {
         if (!userExists(person)) {
             String sql = String.format("INSERT INTO %s (%s,%s,%s,%s) VALUES (?, ?, ?, ?)", TABLE_USER, USERNAME,
@@ -48,6 +54,12 @@ public class PersonCollection {
         return count != null && count > 0;
     }
 
+    /**
+     * check login and password when user login
+     * 
+     * @param username
+     * @param password
+     */
     public boolean checkUser(String username, String password) {
         String sql = String.format("SELECT * FROM %s WHERE %s = ?", TABLE_USER, USERNAME);
         List<Person> users = jdbcTemplate.query(sql, this::mapRowToPerson, username);
@@ -63,6 +75,9 @@ public class PersonCollection {
         return false;
     }
 
+    /**
+     * print information about users
+     */
     public List<Person> getUsers() {
         String sql = "SELECT * FROM cs_schema.users";
         return jdbcTemplate.query(sql, this::mapRowToPerson);

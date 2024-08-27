@@ -22,11 +22,19 @@ public class CarCollection {
         this.auditLogRepository = auditLogRepository;
     }
 
+    /**
+     * information about all cars
+     */
     public List<Car> getCars() {
         String query = "SELECT * FROM cs_schema.cars";
         return jdbcTemplate.query(query, this::mapRowToCar);
     }
 
+    /**
+     * add new car to treeset
+     * 
+     * @param car
+     */
     public void addCar(Car car) {
         String sql = "INSERT INTO cs_schema.cars (mark, model, year, price, condition) VALUES (?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, car.getMark(), car.getModel(), car.getYearOfIssue(), car.getPrice(),
@@ -34,6 +42,12 @@ public class CarCollection {
         auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }
 
+    /**
+     * remove car
+     * 
+     * @param mark
+     * @param model
+     */
     public boolean removeCar(String mark, String model) {
         String sql = "DELETE FROM cs_schema.cars WHERE mark = ? AND model = ?";
         int rowsAffected = jdbcTemplate.update(sql, mark, model);
@@ -44,6 +58,12 @@ public class CarCollection {
         return false;
     }
 
+    /**
+     * update params of car
+     * 
+     * @param mark
+     * @param model
+     */
     public void updateCar(String mark, String model, Car updatedCar) {
         String sql = "UPDATE cs_schema.cars SET mark = ?, model = ?, year = ?, price = ?, condition = ? WHERE mark = ? AND model = ?";
         jdbcTemplate.update(sql, updatedCar.getMark(), updatedCar.getModel(), updatedCar.getYearOfIssue(),
@@ -51,16 +71,36 @@ public class CarCollection {
         auditLogRepository.logAction("System", "Update car", "Mark: " + mark + " Model: " + model);
     }
 
+    /**
+     * get car by mark
+     * 
+     * @param mark
+     * @param model
+     * @return
+     */
     public Car getByMark(String mark, String model) {
         String sql = "SELECT * FROM cs_schema.cars WHERE mark = ? AND model = ?";
         return jdbcTemplate.queryForObject(sql, this::mapRowToCar, mark, model);
     }
 
+    /**
+     * search car by param
+     * 
+     * @param param
+     */
     public List<Car> searchCar(String param, String value) {
         String sql = String.format("SELECT * FROM cs_schema.cars WHERE %s = ?", param);
         return jdbcTemplate.query(sql, this::mapRowToCar, value);
     }
 
+    /**
+     * returning car
+     * 
+     * @param rs
+     * @param rowNum
+     * @return
+     * @throws SQLException
+     */
     private Car mapRowToCar(ResultSet rs, int rowNum) throws SQLException {
         return new Car(
                 rs.getString("mark"),
