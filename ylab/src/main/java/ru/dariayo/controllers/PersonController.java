@@ -27,6 +27,12 @@ public class PersonController {
         this.personRepository = personRepository;
     }
 
+    /**
+     * Execute add person to db
+     * 
+     * @param personDTO DTO with person data
+     * @return
+     */
     @PostMapping("/add")
     public ResponseEntity<UserDTO> addPerson(@Valid @RequestBody UserDTO personDTO) {
         Person person = personMapper.personDTOToPerson(personDTO);
@@ -35,10 +41,16 @@ public class PersonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPersonDTO);
     }
 
+    /**
+     * Execute login user
+     * 
+     * @param loginRequest DTO with data for login
+     * @return Response with 200 and message about successful login or 401
+     */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequest) {
         if (loginRequest.getUsername() == null || loginRequest.getUsername().isBlank() ||
-            loginRequest.getPassword() == null || loginRequest.getPassword().isBlank()) {
+                loginRequest.getPassword() == null || loginRequest.getPassword().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username and password are required");
         }
 
@@ -50,6 +62,11 @@ public class PersonController {
         }
     }
 
+    /**
+     * Return list of all users
+     * 
+     * 
+     */
     @GetMapping
     public ResponseEntity<List<UserDTO>> getUsers() {
         List<UserDTO> userDTOs = personRepository.getUsers().stream()

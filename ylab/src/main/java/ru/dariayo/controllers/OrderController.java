@@ -25,6 +25,12 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
+    /**
+     * Create order
+     * 
+     * @param orderRequest DTO with data of order
+     * @return order
+     */
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderRequestDTO orderRequest) {
         if (orderRequest.getBuyerName() == null || orderRequest.getBuyerName().isBlank() ||
@@ -37,6 +43,13 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(orderDTO);
     }
 
+    /**
+     * Execute updating status of order with id
+     * 
+     * @param id
+     * @param status
+     * @return
+     */
     @PutMapping("/changeStatus/{id}")
     public ResponseEntity<?> updateOrderStatus(@PathVariable Integer id, @RequestParam String status) {
         if (status == null) {
@@ -48,6 +61,11 @@ public class OrderController {
         return ResponseEntity.ok(updatedOrderDTO);
     }
 
+    /**
+     * Return order with id at param
+     * 
+     * @param id
+     */
     @GetMapping("/get/{id}")
     public ResponseEntity<OrderDTO> getOrder(@PathVariable Integer id) {
         Order order = orderRepository.getOrder(id);
@@ -55,6 +73,12 @@ public class OrderController {
         return ResponseEntity.ok(orderDTO);
     }
 
+    /**
+     * Execute search order by his id
+     * 
+     * @param param
+     * @param value
+     */
     @GetMapping("/search")
     public ResponseEntity<?> findOrderById(@RequestParam String param, @RequestParam String value) {
         if (param == null || value == null) {

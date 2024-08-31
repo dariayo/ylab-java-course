@@ -18,13 +18,19 @@ public class CommandController {
         this.liquibaseManager = liquibaseManager;
     }
 
+    /**
+     * Create database with liquibase
+     * 
+     * @return
+     */
     @PutMapping("/createBase")
     public ResponseEntity<String> createBase() {
         try {
             liquibaseManager.createBase();
             return ResponseEntity.status(HttpStatus.CREATED).body("Database created successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create database: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to create database: " + e.getMessage());
         }
     }
 

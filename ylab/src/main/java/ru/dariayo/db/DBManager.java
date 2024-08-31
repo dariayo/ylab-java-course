@@ -18,6 +18,10 @@ public class DBManager {
 
     }
 
+    /**
+     * create connection
+     * @return
+     */
     public Connection connectDB() {
 
         try {

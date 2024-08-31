@@ -26,6 +26,10 @@ public class CarController {
         this.carRepository = carRepository;
     }
 
+    /**
+     * 
+     * @return list of all cars
+     */
     @GetMapping
     public ResponseEntity<List<CarDTO>> getCars() {
         List<CarDTO> carDtos = carRepository.getCars().stream()
@@ -34,6 +38,11 @@ public class CarController {
         return ResponseEntity.ok(carDtos);
     }
 
+    /**
+     * Execute creating new car
+     * 
+     * @param carDTO DTO with car's data
+     */
     @PostMapping
     public ResponseEntity<CarDTO> addCar(@Valid @RequestBody CarDTO carDTO) {
         Car car = carMapper.carDTOToCar(carDTO);
@@ -41,6 +50,14 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carDTO);
     }
 
+    /**
+     * Update params of car
+     * 
+     * @param mark
+     * @param model
+     * @param updatedCarDTO
+     * @return
+     */
     @PutMapping("/update/{mark}/{model}")
     public ResponseEntity<?> updateCar(
             @PathVariable String mark,
@@ -54,6 +71,13 @@ public class CarController {
         return ResponseEntity.ok(updatedCarDTO);
     }
 
+    /**
+     * Delete car by mark and model
+     * 
+     * @param mark
+     * @param model
+     * @return
+     */
     @DeleteMapping("/remove/{mark}/{model}")
     public ResponseEntity<?> removeCar(@PathVariable String mark, @PathVariable String model) {
         if (mark == null || model == null) {
@@ -67,6 +91,13 @@ public class CarController {
         }
     }
 
+    /**
+     * Finding car by params
+     * 
+     * @param param
+     * @param value
+     * @return
+     */
     @GetMapping("/search")
     public ResponseEntity<?> searchCar(@RequestParam String param, @RequestParam String value) {
         if (param == null || value == null) {
