@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 import ru.dariayo.dto.UserDTO;
 import ru.dariayo.mapper.UserMapper;
 import ru.dariayo.model.Person;
@@ -25,7 +27,7 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<UserDTO> addPerson(@RequestBody UserDTO personDTO) {
+    public ResponseEntity<UserDTO> addPerson(@Valid @RequestBody UserDTO personDTO) {
         Person person = personMapper.personDTOToPerson(personDTO);
         personRepository.addPerson(person);
         UserDTO createdPersonDTO = personMapper.personToPersonDTO(person);

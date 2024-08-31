@@ -25,7 +25,10 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDTO> makeOrder(@RequestParam String buyerName, @RequestParam String carMark) {
+    public ResponseEntity<?> makeOrder(@RequestParam String buyerName, @RequestParam String carMark) {
+        if (buyerName == null || carMark == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request body is missing");
+        }
         Order order = new Order(buyerName, carMark, "PENDING");
         orderRepository.makeOrder(buyerName, carMark);
         OrderDTO orderDTO = orderMapper.orderToOrderDTO(order);
@@ -33,7 +36,10 @@ public class OrderController {
     }
 
     @PutMapping("/changeStatus/{id}")
-    public ResponseEntity<OrderDTO> changeStatus(@PathVariable int id, @RequestParam String status) {
+    public ResponseEntity<?> changeStatus(@PathVariable int id, @RequestParam String status) {
+        if (status == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request body is missing");
+        }
         orderRepository.changeStatus(id, status);
         Order updatedOrder = orderRepository.getOrder(id);
         OrderDTO updatedOrderDTO = orderMapper.orderToOrderDTO(updatedOrder);
@@ -48,7 +54,10 @@ public class OrderController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<OrderDTO>> searchOrder(@RequestParam String param, @RequestParam String value) {
+    public ResponseEntity<?> searchOrder(@RequestParam String param, @RequestParam String value) {
+        if (param == null || value == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request body is missing");
+        }
         List<OrderDTO> orders = orderRepository.searchOrder(param, value).stream()
                 .map(orderMapper::orderToOrderDTO)
                 .collect(Collectors.toList());
