@@ -36,15 +36,8 @@ public interface UserMapper {
      * @return объект {@link UserDTO}, полученный из исходного объекта
      *         {@link User}
      */
-    UserDTO toUserDTO(Person person);
+     UserDTO personToPersonDTO(Person person);
 
-    /**
-     * Преобразует объект {@link UserDTO} в объект {@link User}.
-     * 
-     * @param UserTO объект {@link UserDTO} для преобразования
-     * @return объект {@link User}, полученный из исходного объекта
-     *         {@link UserDTO}
-     */
-    List<UserDTO> toUserDTOList(List<Person> persons);
+    Person personDTOToPerson(UserDTO personDTO);
 
 }

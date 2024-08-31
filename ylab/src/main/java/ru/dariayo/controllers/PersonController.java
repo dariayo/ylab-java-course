@@ -1,18 +1,23 @@
 package ru.dariayo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.dariayo.dto.UserDTO;
+import ru.dariayo.mapper.UserMapper;
 import ru.dariayo.model.Person;
 import ru.dariayo.repositories.PersonCollection;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/persons")
 public class PersonController {
 
     private final PersonCollection personRepository;
+    private final UserMapper personMapper = UserMapper.INSTANCE;
 
     @Autowired
     public PersonController(PersonCollection personRepository) {
@@ -20,9 +25,11 @@ public class PersonController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPerson(@RequestBody Person person) {
+    public ResponseEntity<UserDTO> addPerson(@RequestBody UserDTO personDTO) {
+        Person person = personMapper.personDTOToPerson(personDTO);
         personRepository.addPerson(person);
-        return ResponseEntity.ok("Person added successfully");
+        UserDTO createdPersonDTO = personMapper.personToPersonDTO(person);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPersonDTO);
     }
 
     @PostMapping("/login")
@@ -31,13 +38,15 @@ public class PersonController {
         if (success) {
             return ResponseEntity.ok("Login successful");
         } else {
-            return ResponseEntity.status(401).body("Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Person>> getUsers() {
-        List<Person> users = personRepository.getUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        List<UserDTO> userDTOs = personRepository.getUsers().stream()
+                .map(personMapper::personToPersonDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(userDTOs);
     }
 }

@@ -36,14 +36,7 @@ public interface OrderMapper {
      * @return объект {@link OrderDTO}, полученный из исходного объекта
      *         {@link Order}
      */
-    OrderDTO toOrderDTO(Order order);
+    OrderDTO orderToOrderDTO(Order order);
 
-    /**
-     * Преобразует объект {@link OrderDTO} в объект {@link Order}.
-     * 
-     * @param OrderDTO объект {@link OrderDTO} для преобразования
-     * @return объект {@link Order}, полученный из исходного объекта
-     *         {@link OrderDTO}
-     */
-    List<OrderDTO> toOrderDTOList(List<Order> orders);
+    Order orderDTOToOrder(OrderDTO orderDTO);
 }
