@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @PutMapping("/changeStatus/{id}")
-    public ResponseEntity<?> changeStatus(@PathVariable int id, @RequestParam String status) {
+    public ResponseEntity<?> changeStatus(@PathVariable Integer id, @RequestParam String status) {
         if (status == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Request body is missing");
         }
@@ -47,7 +47,7 @@ public class OrderController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<OrderDTO> getOrder(@PathVariable int id) {
+    public ResponseEntity<OrderDTO> getOrder(@PathVariable Integer id) {
         Order order = orderRepository.getOrder(id);
         OrderDTO orderDTO = orderMapper.orderToOrderDTO(order);
         return ResponseEntity.ok(orderDTO);
