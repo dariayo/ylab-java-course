@@ -16,7 +16,7 @@ public class CommandController {
         this.liquibaseManager = liquibaseManager;
     }
 
-    @GetMapping("/createBase")
+    @PutMapping("/createBase")
     public String createBase() {
         liquibaseManager.createBase();
         return "Database created successfully";
