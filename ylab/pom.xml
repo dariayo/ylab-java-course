@@ -17,6 +17,12 @@
         <liquibase.core.version>4.19.0</liquibase.core.version>
         <testcontainers.version>1.20.1</testcontainers.version>
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
+        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
+        <mockito.version>4.5.1</mockito.version>
+        <jackson.version>2.15.3</jackson.version>
+        <mapstruct.version>1.6.0</mapstruct.version>
+        <spring.version>6.1.3</spring.version>
+        <lombok.version>1.18.30</lombok.version>
     </properties>
 
     <dependencies>
@@ -29,24 +35,24 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.15.3</version>
+            <version>${jackson.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.6.0</version>
+            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.5.1</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>3.1.0</version>
+            <version>${jakarta.validation-api.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -89,10 +95,56 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.12.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
-
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.1.5</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -108,8 +160,7 @@
                             <transformers>
                                 <transformer
                                     implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>ru.dariayo.Main</mainClass> <!-- Укажите здесь ваш
-                                    главный класс -->
+                                    <mainClass>ru.dariayo.Main</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

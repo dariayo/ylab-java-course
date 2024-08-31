@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
+
+import org.springframework.stereotype.Service;
+
 import java.net.URL;
 
 import liquibase.Liquibase;
@@ -15,6 +18,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
+@Service
 public class LiquibaseManager {
     public LiquibaseManager() {
     }

@@ -1,78 +1,44 @@
 package ru.dariayo.repositories;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.TreeSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import ru.dariayo.db.DBManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import ru.dariayo.log.AuditLogRepository;
 import ru.dariayo.model.Car;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+@Repository
 public class CarCollection {
-    private static final String TABLE_CAR = "cs_schema.cars";
-    private static final Logger logger = Logger.getLogger(PersonCollection.class.getName());
-    private AuditLogRepository auditLogRepository;
-    private Connection connection;
-    private static final String SQL_ADD_CAR = String.format("INSERT INTO %s (%s,%s,%s,%s,%s) VALUES (?, ?, ?, ?, ?)",
-            TABLE_CAR, "mark", "model", "year", "price", "condition");
 
-    public CarCollection() {
-    }
+    private final JdbcTemplate jdbcTemplate;
+    private final AuditLogRepository auditLogRepository;
 
-    public CarCollection(AuditLogRepository auditLogRepository, DBManager dbManager) {
+    @Autowired
+    public CarCollection(JdbcTemplate jdbcTemplate, AuditLogRepository auditLogRepository) {
+        this.jdbcTemplate = jdbcTemplate;
         this.auditLogRepository = auditLogRepository;
-        this.connection = dbManager.connectDB();
     }
 
     /**
      * information about all cars
      */
     public List<Car> getCars() {
-        List<Car> cars = new ArrayList<>();
         String query = "SELECT * FROM cs_schema.cars";
-        
-        try (PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-            
-            while (resultSet.next()) {
-                Car car = new Car(
-                    resultSet.getString("mark"),
-                    resultSet.getString("model"),
-                    resultSet.getInt("year"),
-                    resultSet.getInt("price"),
-                    resultSet.getString("condition")
-                );
-                cars.add(car);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Логирование ошибки для отладки
-        }
-        return cars;
+        return jdbcTemplate.query(query, this::mapRowToCar);
     }
 
     /**
      * add new car to treeset
      * 
      * @param car
-     * @throws SQLException
      */
-    public void addCar(Car car) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(SQL_ADD_CAR);
-        statement.setString(1, car.getMark());
-        statement.setString(2, car.getModel());
-        statement.setInt(3, car.getPrice());
-        statement.setInt(4, car.getYearOfIssue());
-        statement.setString(5, car.getCondition());
-        statement.executeUpdate();
-        statement.close();
-        logger.log(Level.INFO, "Add car: " + car.getMark());
+    public void addCar(Car car) {
+        String sql = "INSERT INTO cs_schema.cars (mark, model, year, price, condition) VALUES (?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, car.getMark(), car.getModel(), car.getYearOfIssue(), car.getPrice(),
+                car.getCondition());
         auditLogRepository.logAction("System", "Add car", "Mark: " + car.getMark() + " Model: " + car.getModel());
     }
 
@@ -83,19 +49,13 @@ public class CarCollection {
      * @param model
      */
     public boolean removeCar(String mark, String model) {
-        try (PreparedStatement statement = connection
-                .prepareStatement("DELETE FROM cs_schema.cars WHERE mark = ? AND model = ?")) {
-            statement.setString(1, mark);
-            statement.setString(2, model);
-            statement.execute();
-        } catch (Exception e) {
-           return false;
+        String sql = "DELETE FROM cs_schema.cars WHERE mark = ? AND model = ?";
+        int rowsAffected = jdbcTemplate.update(sql, mark, model);
+        if (rowsAffected > 0) {
+            auditLogRepository.logAction("System", "Remove car", "Mark: " + mark + " Model: " + model);
+            return true;
         }
-        logger.log(Level.INFO, "Remove car: " + mark);
-        auditLogRepository.logAction("System", "Remove car",
-                "Mark: " + mark + " Model: " + model);
-        System.out.println("Автомобиль удален");
-        return true;
+        return false;
     }
 
     /**
@@ -104,35 +64,11 @@ public class CarCollection {
      * @param mark
      * @param model
      */
-    public void updateCar(String mark, String model) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите марку автомобиля: ");
-        String markNew = scanner.nextLine();
-        System.out.println("Введите модель автомобиля: ");
-        String modelNew = (scanner.nextLine());
-        System.out.println("Введите год выпуска автомобиля: ");
-        int year = (Integer.parseInt(scanner.nextLine()));
-        System.out.println("Введите цену автомобиля: ");
-        int price = (Integer.parseInt(scanner.nextLine()));
-        System.out.println("Введите состояние автомобиля: ");
-        String condition = (scanner.nextLine());
-        try (PreparedStatement statement = connection.prepareStatement(
-                "UPDATE cs_schema.cars SET mark = ?," +
-                        " model = ?," +
-                        " year= ?," +
-                        " price = ?," +
-                        " condition = ?," +
-                        " WHERE mark = ? AND model = ?")) {
-            statement.setString(1, markNew);
-            statement.setString(2, modelNew);
-            statement.setInt(3, year);
-            statement.setInt(4, price);
-            statement.setString(5, condition);
-            statement.setString(6, mark);
-            statement.setString(7, model);
-            statement.execute();
-        } catch (Exception e) {
-        }
+    public void updateCar(String mark, String model, Car updatedCar) {
+        String sql = "UPDATE cs_schema.cars SET mark = ?, model = ?, year = ?, price = ?, condition = ? WHERE mark = ? AND model = ?";
+        jdbcTemplate.update(sql, updatedCar.getMark(), updatedCar.getModel(), updatedCar.getYearOfIssue(),
+                updatedCar.getPrice(), updatedCar.getCondition(), mark, model);
+        auditLogRepository.logAction("System", "Update car", "Mark: " + mark + " Model: " + model);
     }
 
     /**
@@ -143,25 +79,8 @@ public class CarCollection {
      * @return
      */
     public Car getByMark(String mark, String model) {
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT FROM cs_schema.cars WHERE mark = ? and model = ?")) {
-            statement.setString(1, mark);
-            statement.setString(2, model);
-            statement.execute();
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    Car car = new Car(
-                            resultSet.getString("mark"),
-                            resultSet.getString("model"),
-                            resultSet.getInt("year"),
-                            resultSet.getInt("price"),
-                            resultSet.getString("condition"));
-                    return car;
-                }
-            }
-        } catch (Exception e) {
-        }
-        return null;
+        String sql = "SELECT * FROM cs_schema.cars WHERE mark = ? AND model = ?";
+        return jdbcTemplate.queryForObject(sql, this::mapRowToCar, mark, model);
     }
 
     /**
@@ -169,32 +88,25 @@ public class CarCollection {
      * 
      * @param param
      */
-    public void searchCar(String param) {
-        TreeSet<Car> cars = new TreeSet<>();
-        System.out.println("Введите параметр поиска");
-        Scanner scanner = new Scanner(System.in);
-        String arg = scanner.nextLine();
-        try (PreparedStatement statement = connection.prepareStatement(
-                "SELECT FROM cs_schema.cars WHERE ? = ? ")) {
-            statement.setString(1, param);
-            statement.setString(2, arg);
-            statement.execute();
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    Car car = new Car(
-                            resultSet.getString("mark"),
-                            resultSet.getString("model"),
-                            resultSet.getInt("year"),
-                            resultSet.getInt("price"),
-                            resultSet.getString("condition"));
-                    cars.add(car);
-                }
-            }
-        } catch (Exception e) {
-        }
-        for (Car car : cars) {
-            System.out.println(car.getMark() + ", " + car.getModel() + ", " + car.getPrice());
-        }
+    public List<Car> searchCar(String param, String value) {
+        String sql = String.format("SELECT * FROM cs_schema.cars WHERE %s = ?", param);
+        return jdbcTemplate.query(sql, this::mapRowToCar, value);
     }
 
+    /**
+     * returning car
+     * 
+     * @param rs
+     * @param rowNum
+     * @return
+     * @throws SQLException
+     */
+    private Car mapRowToCar(ResultSet rs, int rowNum) throws SQLException {
+        return new Car(
+                rs.getString("mark"),
+                rs.getString("model"),
+                rs.getInt("year"),
+                rs.getInt("price"),
+                rs.getString("condition"));
+    }
 }
