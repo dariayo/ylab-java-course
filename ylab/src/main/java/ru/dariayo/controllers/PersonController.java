@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import ru.dariayo.dto.LoginRequestDTO;
 import ru.dariayo.dto.UserDTO;
 import ru.dariayo.mapper.UserMapper;
 import ru.dariayo.model.Person;
@@ -35,8 +36,13 @@ public class PersonController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
-        boolean success = personRepository.checkUser(username, password);
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO loginRequest) {
+        if (loginRequest.getUsername() == null || loginRequest.getUsername().isBlank() ||
+            loginRequest.getPassword() == null || loginRequest.getPassword().isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username and password are required");
+        }
+
+        boolean success = personRepository.checkUser(loginRequest.getUsername(), loginRequest.getPassword());
         if (success) {
             return ResponseEntity.ok("Login successful");
         } else {
