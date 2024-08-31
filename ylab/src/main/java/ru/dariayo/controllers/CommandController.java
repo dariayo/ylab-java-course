@@ -1,6 +1,8 @@
 package ru.dariayo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import ru.dariayo.LiquibaseManager;
@@ -17,22 +19,37 @@ public class CommandController {
     }
 
     @PutMapping("/createBase")
-    public String createBase() {
-        liquibaseManager.createBase();
-        return "Database created successfully";
+    public ResponseEntity<String> createBase() {
+        try {
+            liquibaseManager.createBase();
+            return ResponseEntity.status(HttpStatus.CREATED).body("Database created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create database: " + e.getMessage());
+        }
     }
 
-    @GetMapping("/command")
-    public String executeCommand(@RequestParam String command) {
+    @PostMapping("/command")
+    public ResponseEntity<String> executeCommand(@RequestParam String command) {
+        if (command == null || command.isBlank()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Command cannot be null or empty");
+        }
+
+        String responseMessage;
         switch (command.toLowerCase()) {
             case "login":
-                return "Login command executed";
+                responseMessage = "Login command executed";
+                break;
             case "register":
-                return "Register command executed";
+                responseMessage = "Register command executed";
+                break;
             case "help":
-                return "Available commands: login, register, help";
+                responseMessage = "Available commands: login, register, help";
+                break;
             default:
-                return "Unknown command";
+                responseMessage = "Unknown command";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
         }
+
+        return ResponseEntity.ok(responseMessage);
     }
 }
