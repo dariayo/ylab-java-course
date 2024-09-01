@@ -1,0 +1,5 @@
+ru/dariayo/starter/logging/LoggingAspect.class
+ru/dariayo/starter/config/EnableAuditLogging.class
+ru/dariayo/starter/App.class
+ru/dariayo/starter/audit/AuditAspect.class
+ru/dariayo/starter/config/AuditLoggingAutoConfiguration.class

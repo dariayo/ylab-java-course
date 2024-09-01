@@ -1,0 +1,5 @@
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/audit-logging-starter/src/main/java/ru/dariayo/starter/config/AuditLoggingAutoConfiguration.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/audit-logging-starter/src/main/java/ru/dariayo/starter/audit/AuditAspect.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/audit-logging-starter/src/main/java/ru/dariayo/starter/App.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/audit-logging-starter/src/main/java/ru/dariayo/starter/logging/LoggingAspect.java
+/Users/dasha/ylab-java-course/ylab-java-course/ylab/audit-logging-starter/src/main/java/ru/dariayo/starter/config/EnableAuditLogging.java
