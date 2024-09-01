@@ -1,10 +1,13 @@
 package ru.dariayo;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -16,6 +19,7 @@ import ru.dariayo.model.Car;
 import ru.dariayo.repositories.CarCollection;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = CarController.class)
+@AutoConfigureMockMvc
 public class CarControllerTest {
 
     @Autowired
@@ -96,5 +101,36 @@ public class CarControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].mark").value(car.getMark()))
                 .andExpect(jsonPath("$[0].model").value(car.getModel()));
+    }
+
+    @Test
+    @DisplayName("addCar should return 400 when input is invalid")
+    public void addCar_shouldReturn400ForInvalidInput() throws Exception {
+        mockMvc.perform(post("/api/cars")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"mark\":\"Toyota\",\"model\":\"\",\"year\":\"\",\"price\":\"\",\"condition\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("removeCar should return 404 when car is not found")
+    public void removeCar_shouldReturn404WhenCarNotFound() throws Exception {
+        given(carRepository.removeCar(anyString(), anyString())).willReturn(false);
+
+        mockMvc.perform(delete("/api/cars/remove/Toyota/Camry"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Car not found"));
+    }
+
+    @Test
+    @DisplayName("searchCar should return empty list when no cars found")
+    public void searchCar_shouldReturnEmptyListWhenNoCarsFound() throws Exception {
+        given(carRepository.searchCar(anyString(), anyString())).willReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/cars/search")
+                .param("param", "mark")
+                .param("value", "NonExistingBrand"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
     }
 }
