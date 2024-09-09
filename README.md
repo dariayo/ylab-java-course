@@ -16,4 +16,6 @@
 
 ## 3. [ДЗ №3](https://github.com/dariayo/ylab-java-course/pull/3)
 
-## 4. [ДЗ №3](https://github.com/dariayo/ylab-java-course/pull/4)
+## 4. [ДЗ №4](https://github.com/dariayo/ylab-java-course/pull/4)
+
+## 5. [ДЗ №5](https://github.com/dariayo/ylab-java-course/pull/5)
